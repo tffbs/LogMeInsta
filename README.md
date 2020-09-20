@@ -12,3 +12,9 @@ Az ImageHUB alkalmazásba Facebook login segítségével belépve kereshetek ism
 
 #### Hogyan
 Az alkalmazás Facebook authentikációt igényel a funkciók használatához, rendelkezik frontend és backend oldallal, előbbi egy modern SPA framework-öt használ egy letisztult külső mögött.Elvárás, hogy az oldal mobilra optimalizált nézetben is megtekinthető legyen.
+
+## Választott stack
+### Angular
+### .NET Core
+### db?
+### Fb login: https://developers.facebook.com/docs/facebook-login/web
