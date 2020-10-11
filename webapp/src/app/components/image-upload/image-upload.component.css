@@ -1,0 +1,18 @@
+.card {
+    margin: 0 auto; /* Added */
+    float: none; /* Added */
+    margin-bottom: 10px; /* Added */
+}
+
+img{
+    width: 100px;
+    margin: 0 auto; /* Added */
+    float: none; /* Added */
+    margin-bottom: 10px; /* Added */
+    margin-top: 10px; /* Added */
+}
+
+.btn{
+    margin: 10px;
+}
+

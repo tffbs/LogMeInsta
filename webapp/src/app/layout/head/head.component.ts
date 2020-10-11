@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { SearchService } from './../../services/search.service';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-head',
@@ -7,14 +9,35 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HeadComponent implements OnInit {
   isExpanded: boolean = false;
-  
-  constructor() { }
+  searchForm: FormGroup;
+  submitted;
+
+  constructor(private formBuilder: FormBuilder, private searchService: SearchService) { }
 
   ngOnInit(): void {
+    this.initForm();
+  }
+
+  initForm(){
+    this.searchForm = this.formBuilder.group({
+      value: ['', Validators.required],
+  });
   }
 
   toggle() {
     this.isExpanded = !this.isExpanded;
   }
+
+  onSubmit(){
+    let value = this.searchForm.controls.value.value;
+    if (this.searchForm.invalid) {
+      return;
+  }
+  this.submitted = true;
+    this.searchService.search(value);
+  }
+
+  get f() { return this.searchForm.controls; }
+
 
 }

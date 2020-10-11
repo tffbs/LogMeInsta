@@ -1,6 +1,7 @@
 import { Helpers } from './../../helpers/helpers';
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -11,7 +12,7 @@ export class AppComponent implements OnInit {
   subscription: Subscription;
 
   authentication: boolean = false;
-  constructor(private helpers: Helpers) { }
+  constructor(private helpers: Helpers, private router: Router) { }
 
   ngOnInit(): void {
   }

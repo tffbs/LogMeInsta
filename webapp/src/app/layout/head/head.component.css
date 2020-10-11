@@ -1,0 +1,21 @@
+img{
+    width: 20px;
+}
+
+.logo{
+    width: 40px;
+}
+
+form{
+    width: 50%;
+    margin: 0 auto;
+}
+
+.alignCenter{
+    margin:0 auto;
+    width:100%;
+    overflow: auto;
+    width: 600px;
+    margin-left:auto;
+    margin-right:auto;
+ }

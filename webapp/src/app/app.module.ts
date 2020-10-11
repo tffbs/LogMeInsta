@@ -1,3 +1,5 @@
+import { ImageService } from './services/image.service';
+import { SearchService } from './services/search.service';
 import { Helpers } from './helpers/helpers';
 import { RouterModule } from '@angular/router';
 import { AppComponent } from './layout/app/app.component';
@@ -14,7 +16,10 @@ import { SearchComponent } from './shared/search/search.component';
 import { ImageUploadComponent } from './components/image-upload/image-upload.component';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
+import { UsersComponent } from './components/users/users.component';
+import { ToastrModule } from 'ngx-toastr';
 
 
 @NgModule({
@@ -28,6 +33,7 @@ import { HttpClientModule } from '@angular/common/http';
     PhotocardComponent,
     SearchComponent,
     ImageUploadComponent,
+    UsersComponent,
   ],
   imports: [
     AppRoutingModule,
@@ -36,9 +42,11 @@ import { HttpClientModule } from '@angular/common/http';
     FormsModule,
     ReactiveFormsModule,
     CommonModule,
-    BrowserModule 
+    BrowserModule,
+    BrowserAnimationsModule,
+    ToastrModule.forRoot()
   ],
-  providers: [Helpers],
+  providers: [Helpers, SearchService, ImageService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
