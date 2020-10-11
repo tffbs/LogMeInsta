@@ -16,10 +16,10 @@ import { SearchComponent } from './shared/search/search.component';
 import { ImageUploadComponent } from './components/image-upload/image-upload.component';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
 import { UsersComponent } from './components/users/users.component';
-import { ToastrModule } from 'ngx-toastr';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { ToastsContainerComponent } from './shared/toasts-container/toasts-container.component';
 
 
 @NgModule({
@@ -34,6 +34,7 @@ import { ToastrModule } from 'ngx-toastr';
     SearchComponent,
     ImageUploadComponent,
     UsersComponent,
+    ToastsContainerComponent,
   ],
   imports: [
     AppRoutingModule,
@@ -43,8 +44,7 @@ import { ToastrModule } from 'ngx-toastr';
     ReactiveFormsModule,
     CommonModule,
     BrowserModule,
-    BrowserAnimationsModule,
-    ToastrModule.forRoot()
+    NgbModule
   ],
   providers: [Helpers, SearchService, ImageService],
   bootstrap: [AppComponent]
