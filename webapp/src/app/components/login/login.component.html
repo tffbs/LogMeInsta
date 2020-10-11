@@ -2,7 +2,11 @@
   <div class="d-flex h-100 align-items-center">
     <div class="card">
       <div class="card-header">
-        <h3>Sign In</h3>
+        <h3>
+          Sign In to LogMeInsta
+          <img class="logo" src="assets/img/logo.png" width="50" height="50" />
+        </h3>
+
         <!-- <div class="d-flex justify-content-end social_icon">
           <span><i class="fab fa-facebook-square"></i></span>
           <span><i class="fab fa-google-plus-square"></i></span>
@@ -27,14 +31,29 @@
 					<div class="row align-items-center remember">
 						<input type="checkbox">Remember Me
           </div> -->
+          <div class="form-group input-group">
+            <h5 style="color: white">Welcome to LogMeInsta!</h5>
+            <p style="color: white">
+              Please log in with the button below, using your Facebook account!
+            </p>
+          </div>
           <div class="form-group">
+            <button
+              class="loginBtn loginBtn--facebook"
+              type="submit"
+              (click)="submitLogin()"
+            >
+              Login with Facebook
+            </button>
+          </div>
+          <!-- <div class="form-group">
             <input
               type="submit"
               (click)="submitLogin()"
               value="Facebook"
               class="btn float-left login_btn"
             />
-          </div>
+          </div> -->
           <div class="form-group">
             <input
               type="submit"
