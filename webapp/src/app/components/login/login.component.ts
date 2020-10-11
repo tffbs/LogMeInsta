@@ -42,7 +42,6 @@ export class LoginComponent implements OnInit {
 
   submitLogin() {
     console.log('submit login to facebook');
-    console.log('logged in' + this.loggedIn);
     // FB.login();
     FB.login((response) => {
       console.log('submitLogin', response);
