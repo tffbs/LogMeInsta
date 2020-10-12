@@ -1,3 +1,4 @@
+import { AppConfig } from './../config/config';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
@@ -7,9 +8,9 @@ import { Observable } from 'rxjs';
 })
 export class ImageService {
 
-  private pathAPI = 'http://localhost:50498';
+  private pathAPI = this.config.setting['PathAPI'] + 'categories/';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private config: AppConfig) { }
 
   onUpload(file): Observable<any> {
     // this.http is the injected HttpClient
