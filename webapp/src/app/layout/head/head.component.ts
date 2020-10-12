@@ -1,3 +1,4 @@
+import { Helpers } from './../../helpers/helpers';
 import { SearchService } from './../../services/search.service';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
@@ -12,7 +13,7 @@ export class HeadComponent implements OnInit {
   searchForm: FormGroup;
   submitted;
 
-  constructor(private formBuilder: FormBuilder, private searchService: SearchService) { }
+  constructor(private formBuilder: FormBuilder, private searchService: SearchService, private helpers: Helpers) { }
 
   ngOnInit(): void {
     this.initForm();
@@ -39,5 +40,8 @@ export class HeadComponent implements OnInit {
 
   get f() { return this.searchForm.controls; }
 
+  logout(){
+    this.helpers.logout()
+  }
 
 }

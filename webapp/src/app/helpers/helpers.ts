@@ -8,6 +8,10 @@ export class Helpers{
       this.authenticateEvent.emit(true);
     }
 
+    logout() {
+      this.authenticateEvent.emit(false);
+    }
+
     isAuthenticated(){
         return this.authenticateEvent;
     }

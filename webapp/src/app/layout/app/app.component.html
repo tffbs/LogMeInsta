@@ -1,4 +1,4 @@
-<div *ngIf="authentication">
+<div *ngIf="isAuthenticated">
     <app-head></app-head>
     <div>
       <div>
@@ -6,7 +6,7 @@
       </div>
     </div>
   </div>
-  <div *ngIf="!authentication">
+  <div *ngIf="!isAuthenticated">
     <div class="container"><app-login></app-login></div>
   </div>
   <app-footer></app-footer>

@@ -1,3 +1,4 @@
+import { AppConfig } from './config/config';
 import { ImageService } from './services/image.service';
 import { SearchService } from './services/search.service';
 import { Helpers } from './helpers/helpers';
@@ -46,7 +47,7 @@ import { Ng2SearchPipeModule } from 'ng2-search-filter';
     NgbModule,
     Ng2SearchPipeModule,
   ],
-  providers: [Helpers, SearchService, ImageService],
+  providers: [Helpers, SearchService, ImageService, AppConfig],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
