@@ -20,8 +20,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { UsersComponent } from './components/users/users.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ToastsContainerComponent } from './shared/toasts-container/toasts-container.component';
-
-
+import { Ng2SearchPipeModule } from 'ng2-search-filter';
 @NgModule({
   declarations: [
     AppComponent,
@@ -44,9 +43,10 @@ import { ToastsContainerComponent } from './shared/toasts-container/toasts-conta
     ReactiveFormsModule,
     CommonModule,
     BrowserModule,
-    NgbModule
+    NgbModule,
+    Ng2SearchPipeModule,
   ],
   providers: [Helpers, SearchService, ImageService],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
