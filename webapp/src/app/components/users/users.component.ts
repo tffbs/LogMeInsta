@@ -44,16 +44,16 @@ export class UsersComponent implements OnInit {
     if (
       this.users.find((x) => x.id == user).isFriend === 'assets/img//remove.png'
     ) {
-      this.toastService.show('Friend removed.', {
-        classname: 'bg-danger text-light',
-        delay: 2000,
-      });
+      // this.toastService.show('Friend removed.', {
+      //   classname: 'bg-danger text-light',
+      //   delay: 2000,
+      // });
       this.users.find((x) => x.id == user).isFriend = 'assets/img//add.png';
     } else {
-      this.toastService.show('Friend added.', {
-        classname: 'bg-success text-light',
-        delay: 2000,
-      });
+      // this.toastService.show('Friend added.', {
+      //   classname: 'bg-success text-light',
+      //   delay: 2000,
+      // });
       this.users.find((x) => x.id == user).isFriend = 'assets/img//remove.png';
     }
     // FB.login();
