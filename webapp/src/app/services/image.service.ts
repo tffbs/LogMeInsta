@@ -10,15 +10,28 @@ export class ImageService {
 
   private pathAPI = this.config.setting['PathAPI'] + 'categories/';
 
+  private imagesBase64: Array<String> = new Array<String>();
+
   constructor(private http: HttpClient, private config: AppConfig) { }
 
-  onUpload(file): Observable<any> {
+  public onUpload(file): Observable<any> {
     // this.http is the injected HttpClient
-    this.delay(1000);
-    return this.http.post(this.pathAPI + '/file-upload', file);
+    this.imagesBase64.push(file);
+    return this.getMockObservable();
   }
 
-  delay(ms: number) {
+  public getImgesInBase64(){
+      return this.imagesBase64;
+  }
+
+  private delay(ms: number) {
     return new Promise( resolve => setTimeout(resolve, ms) );
+  }
+
+  private getMockObservable(){
+    return new Observable((observer) => {
+      observer.next(true)
+    }
+    );
   }
 }
