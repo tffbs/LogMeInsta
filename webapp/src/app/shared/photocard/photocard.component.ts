@@ -5,6 +5,7 @@ import { Component, OnInit } from '@angular/core';
   templateUrl: './photocard.component.html',
   styleUrls: ['./photocard.component.css']
 })
+
 export class PhotocardComponent implements OnInit {
 
   constructor() { }
