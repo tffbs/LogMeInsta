@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 export class AppModule {}
 @Component({
@@ -10,24 +11,42 @@ export class UsersComponent implements OnInit {
   title = 'Search Users';
   searchText;
   users = [
-    { id: 11, name: 'Sanyi', isFriend: true },
-    { id: 12, name: 'Feri', isFriend: true },
-    { id: 13, name: 'Jani', isFriend: true },
-    { id: 14, name: 'Kati', isFriend: true },
-    { id: 15, name: 'Ivett', isFriend: false },
-    { id: 16, name: 'Áron', isFriend: true },
-    { id: 17, name: 'Peti', isFriend: true },
-    { id: 18, name: 'Laci', isFriend: false },
-    { id: 19, name: 'Gabi', isFriend: true },
-    { id: 20, name: 'Iván', isFriend: false },
+    {
+      id: 11,
+      name: 'Ivett',
+      isFriend: 'assets/img//remove.png',
+      profilePicture: 'assets/img/profile_pictures/ivett.png',
+    },
+    {
+      id: 12,
+      name: 'Csaba',
+      isFriend: 'assets/img//add.png',
+      profilePicture: 'assets/img/profile_pictures/sanyi.png',
+    },
+    {
+      id: 13,
+      name: 'Jani',
+      isFriend: 'assets/img//add.png',
+      profilePicture: 'assets/img/profile_pictures/jani.png',
+    },
+    {
+      id: 14,
+      name: 'Kati',
+      isFriend: 'assets/img//remove.png',
+      profilePicture: 'assets/img/profile_pictures/kati.png',
+    },
   ];
   ngOnInit(): void {}
 
   changeUserStatus(user) {
     console.log('changing friend status');
-    this.users.find((x) => x.id == user).isFriend = !this.users.find(
-      (x) => x.id == user
-    ).isFriend;
+    if (
+      this.users.find((x) => x.id == user).isFriend === 'assets/img//remove.png'
+    ) {
+      this.users.find((x) => x.id == user).isFriend = 'assets/img//add.png';
+    } else {
+      this.users.find((x) => x.id == user).isFriend = 'assets/img//remove.png';
+    }
     // FB.login();
   }
 }
