@@ -12,8 +12,11 @@ export class FeedComponent implements OnInit, OnDestroy {
 
   cardDetails: Array<PhotoCard>;
   cardDetailsSubscription: Subscription;
+  
 
-  constructor(private imageService: ImageService) { }
+  constructor(private imageService: ImageService) {
+    
+  }
 
 
   ngOnInit(): void {
