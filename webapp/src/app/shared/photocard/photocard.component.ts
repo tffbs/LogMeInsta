@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { PhotoCard } from '../../model/photo';
 
 @Component({
@@ -8,6 +8,9 @@ import { PhotoCard } from '../../model/photo';
 })
 
 export class PhotocardComponent implements OnInit {
+
+  @Input() image: string;
+  @Input() userName: string;
 
   constructor() { }
 

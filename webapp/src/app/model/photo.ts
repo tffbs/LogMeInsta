@@ -3,6 +3,12 @@ export class PhotoCard{
     image: string;
     username: string;
 
+    constructor(image, username) {
+        this.image = image;
+        this.username = username;
+        
+    }
+
 }
 
 export const PHOTOS: PhotoCard[] = [
