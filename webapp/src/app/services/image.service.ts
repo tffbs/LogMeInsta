@@ -15,23 +15,24 @@ export class ImageService {
   constructor(private http: HttpClient, private config: AppConfig) { }
 
   public onUpload(file): Observable<any> {
-    // this.http is the injected HttpClient
     this.imagesBase64.push(file);
     return this.getMockObservable();
   }
 
-  public getImgesInBase64(){
-      return this.imagesBase64;
+  public getImgesInBase64() {
+    return this.imagesBase64;
   }
 
   private delay(ms: number) {
-    return new Promise( resolve => setTimeout(resolve, ms) );
+    return new Promise(resolve => setTimeout(resolve, ms));
   }
 
-  private getMockObservable(){
-    return new Observable((observer) => {
-      observer.next(true)
-    }
-    );
+  private getMockObservable() {
+    return Observable.create(obs => {
+      setTimeout(() => {
+        obs.next([1, 2, 3]);
+        obs.complete();
+      }, 500);
+    });
   }
 }
