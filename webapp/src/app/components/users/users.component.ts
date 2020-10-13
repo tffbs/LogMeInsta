@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ToastService } from './../../services/toast.service';
 
 export class AppModule {}
 @Component({
@@ -7,6 +8,7 @@ export class AppModule {}
   styleUrls: ['./users.component.css'],
 })
 export class UsersComponent implements OnInit {
+  constructor(private toastService: ToastService) {}
   title = 'Search Users';
   searchText;
   users = [
@@ -42,8 +44,16 @@ export class UsersComponent implements OnInit {
     if (
       this.users.find((x) => x.id == user).isFriend === 'assets/img//remove.png'
     ) {
+      this.toastService.show('Friend removed.', {
+        classname: 'bg-danger text-light',
+        delay: 2000,
+      });
       this.users.find((x) => x.id == user).isFriend = 'assets/img//add.png';
     } else {
+      this.toastService.show('Friend added.', {
+        classname: 'bg-success text-light',
+        delay: 2000,
+      });
       this.users.find((x) => x.id == user).isFriend = 'assets/img//remove.png';
     }
     // FB.login();
