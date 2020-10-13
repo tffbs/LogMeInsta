@@ -9,7 +9,7 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 })
 export class ImageUploadComponent implements OnInit {
 
-  selectedFile: File
+  selectedFileBase64: string;
   loading = false;
   message;
 
@@ -20,13 +20,28 @@ export class ImageUploadComponent implements OnInit {
 
 
   onFileChanged(event) {
-    this.selectedFile = event.target.files[0]
+    this.getBase64(event.target.files[0]);
+  }
+
+  getBase64(file: File) {
+    let reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = function () {
+      //me.modelvalue = reader.result;
+      console.log(reader.result);
+    };
+    reader.onerror = function (error) {
+      console.log('Error: ', error);
+    };  
+    reader.onload = () => {
+      this.selectedFileBase64 = reader.result as string;
+    };
   }
 
   onUpload() {
-    if (this.selectedFile) {
+    if (this.selectedFileBase64) {
       this.loading = true;
-      this.imageService.onUpload(this.selectedFile)
+      this.imageService.onUpload(this.selectedFileBase64)
         .subscribe(x => {
           this.loading = false;
           this.toastService.show('The image was successfully uploaded.', { classname: 'bg-success text-light', delay: 2000 });
