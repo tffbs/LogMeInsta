@@ -1,4 +1,10 @@
 
+  .table th, .table td {
+    padding: none;
+    vertical-align: none;
+    border-top: none;
+}
+  
   .photocard {
     color: #eee;
     height: 400px;

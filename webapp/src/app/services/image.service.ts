@@ -18,7 +18,7 @@ export class ImageService {
   constructor(private http: HttpClient, private config: AppConfig) { }
 
   public onUpload(file): Observable<any> {
-    let card = new PhotoCard(file, "Mock user");
+    let card = new PhotoCard(file, "DevUser");
     this.cardDetails.push(card);
     this.cardDetailsEventEmitter.next(this.cardDetails);
     return this.getMockObservable();
