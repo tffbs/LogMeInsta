@@ -1,4 +1,4 @@
-import { PhotoCard } from './../model/photo';
+import { PhotoCard } from './../models/photo';
 import { AppConfig } from './../config/config';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { EventEmitter, Injectable } from '@angular/core';

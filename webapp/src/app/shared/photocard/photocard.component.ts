@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { PhotoCard } from '../../model/photo';
+import { PhotoCard } from '../../models/photo';
 
 @Component({
   selector: 'app-photocard',

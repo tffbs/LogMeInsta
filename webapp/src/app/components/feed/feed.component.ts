@@ -1,7 +1,7 @@
 import { Subscription } from 'rxjs';
 import { ImageService } from './../../services/image.service';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { PhotoCard } from 'src/app/model/photo';
+import { PhotoCard } from 'src/app/models/photo';
 
 @Component({
   selector: 'app-feed',
