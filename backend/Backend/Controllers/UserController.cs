@@ -4,8 +4,10 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using Backend.Model;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Primitives;
 using Newtonsoft.Json;
 
 namespace Backend.Controllers
@@ -15,29 +17,34 @@ namespace Backend.Controllers
     public class UserController : ControllerBase
     {
 
-        public ActionResult UserTest()
+        //Pure function, database missing
+        private string GetUser()
         {
-            return Ok();
+            User u = new User()
+            {
+                UID = "1234$",
+                Bio = "",
+                FirstName = "Test",
+                LastName = "Mock"
+            };
+
+            return JsonConvert.SerializeObject(u);
         }
 
 
-        [HttpPost]
-        public ActionResult Dashboard(HttpRequestHeaders header)
+        public string GetConnectionId()
         {
-            var result = new System.Collections.ObjectModel.Collection<string>();
-            IEnumerable<string> values;
-            if (header.TryGetValues("CONNECTION-ID", out values))
+            //check the header
+            StringValues headerValues;
+            var connectionId = string.Empty;
+            if (Request.Headers.TryGetValue("connectionID", out headerValues))
             {
-                return Ok();
+                //validate the token
+                connectionId = headerValues.FirstOrDefault();
             }
-            return BadRequest();
 
-            HttpHeaders headers = response.Headers;
-            IEnumerable<string> values;
-            if (headers.TryGetValues("X-BB-SESSION", out values))
-            {
-                string session = values.First();
-            }
+            //find user by connectionId, serialize and send back as Json.
+            return GetUser();
         }
     }
 }
