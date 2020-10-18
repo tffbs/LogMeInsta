@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Reflection.Metadata.Ecma335;
 using System.Threading.Tasks;
 using Backend.Model;
 using Microsoft.AspNetCore.Http;
@@ -17,22 +18,38 @@ namespace Backend.Controllers
     public class UserController : ControllerBase
     {
 
-        //Pure function, database missing
-        private string GetUser()
+        [Route("users")]
+        [HttpGet]
+        public string Users()
         {
-            User u = new User()
-            {
-                UID = "1234$",
-                Bio = "",
-                FirstName = "Test",
-                LastName = "Mock"
-            };
+            string connectionId = GetConnectionId();
+            List<UserViewModel> users = new List<UserViewModel>();
+            for (int i = 0; i < 5; i++)
+                users.Add(GetUserViewModel());
 
-            return JsonConvert.SerializeObject(u);
+            return JsonConvert.SerializeObject(users);
+        }
+
+        //Pure function, database missing
+        private UserViewModel GetUserViewModel()
+        {
+            Random r = new Random();
+
+            //Generate random user
+            string fname = string.Empty;
+            string lname = string.Empty;
+            for (int i = 0; i < 5; i++)
+            {
+                fname += (char)r.Next(65, 91);
+                lname += (char)r.Next(65, 91);
+            }
+
+            return new UserViewModel(fname,lname,"email");
         }
 
 
-        public string GetConnectionId()
+        [HttpGet]
+        private string GetConnectionId()
         {
             //check the header
             StringValues headerValues;
@@ -41,10 +58,11 @@ namespace Backend.Controllers
             {
                 //validate the token
                 connectionId = headerValues.FirstOrDefault();
+
+                return connectionId;
             }
 
-            //find user by connectionId, serialize and send back as Json.
-            return GetUser();
+            throw new Exception("ConnectionID not found in header values.");
         }
     }
 }
