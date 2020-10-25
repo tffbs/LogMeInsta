@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Reflection.Metadata.Ecma335;
 using System.Threading.Tasks;
+using Backend.Data;
 using Backend.Model;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -17,36 +18,21 @@ namespace Backend.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
+        ApplicationDbContext context;
+
+        public UserController(ApplicationDbContext context)
+        {
+            this.context = context;
+        }
 
         [Route("users")]
         [HttpGet]
-        public string Users()
+        public IActionResult Users()
         {
-            string connectionId = GetConnectionId();
-            List<UserViewModel> users = new List<UserViewModel>();
-            for (int i = 0; i < 5; i++)
-                users.Add(GetUserViewModel());
-
-            return JsonConvert.SerializeObject(users);
+            context.Add(new User() { UID = Guid.NewGuid().ToString(), Email = "asd@xyt.com", Bio = "asdasdasd", FirstName = "jozsi", LastName = "Fred", ProfilePic = "asd", ConnectionID = "asdiujnsdiguhefiuh", });
+            this.context.SaveChanges();
+            return Ok(this.context.Users);
         }
-
-        //Pure function, database missing
-        private UserViewModel GetUserViewModel()
-        {
-            Random r = new Random();
-
-            //Generate random user
-            string fname = string.Empty;
-            string lname = string.Empty;
-            for (int i = 0; i < 5; i++)
-            {
-                fname += (char)r.Next(65, 91);
-                lname += (char)r.Next(65, 91);
-            }
-
-            return new UserViewModel(fname,lname,"email");
-        }
-
 
         [HttpGet]
         private string GetConnectionId()
