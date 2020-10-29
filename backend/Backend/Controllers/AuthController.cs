@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Backend.Model;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Facebook;
 using Microsoft.AspNetCore.Http;
@@ -13,10 +14,10 @@ namespace Backend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class Auth : ControllerBase
+    public class AuthController : ControllerBase
     {
         UserManager<ApplicationUser> _userManager;
-        public Auth(UserManager<ApplicationUser> _userManager)
+        public AuthController(UserManager<ApplicationUser> _userManager)
         {
             this._userManager = _userManager;
         }
