@@ -22,6 +22,12 @@ namespace Backend
 {
     public class Startup
     {
+        public static IConfiguration Configuration { get; set; }
+        public Startup(IConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
+
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
@@ -54,6 +60,9 @@ namespace Backend
                     {
                         facebookOptions.AppId = Configuration["Authentication:Facebook:AppId"];
                         facebookOptions.AppSecret = Configuration["Authentication:Facebook:AppSecret"];
+                        facebookOptions.CorrelationCookie.SameSite = SameSiteMode.Lax;
+                        facebookOptions.SaveTokens = true;
+                        facebookOptions.Scope.Add("user_friends");
                     });
         }
 
@@ -71,8 +80,6 @@ namespace Backend
             {
                 ep.MapControllers();
             });
-
-
         }
     }
 }

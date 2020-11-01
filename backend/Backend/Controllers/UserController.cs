@@ -25,15 +25,6 @@ namespace Backend.Controllers
             this.context = context;
         }
 
-        [Route("users")]
-        [HttpGet]
-        public IActionResult Users()
-        {
-            context.Add(new User() { UID = Guid.NewGuid().ToString(), Email = "asd@xyt.com", Bio = "asdasdasd", FirstName = "jozsi", LastName = "Fred", ProfilePic = "asd", ConnectionID = "asdiujnsdiguhefiuh", });
-            this.context.SaveChanges();
-            return Ok(this.context.Users);
-        }
-
         [HttpGet]
         private string GetConnectionId()
         {

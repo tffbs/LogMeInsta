@@ -39,7 +39,9 @@ namespace Backend.Migrations
                     TwoFactorEnabled = table.Column<bool>(nullable: false),
                     LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
                     LockoutEnabled = table.Column<bool>(nullable: false),
-                    AccessFailedCount = table.Column<int>(nullable: false)
+                    AccessFailedCount = table.Column<int>(nullable: false),
+                    Discriminator = table.Column<string>(nullable: false),
+                    ProfilePic = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -47,27 +49,17 @@ namespace Backend.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Users",
+                name: "Pictures",
                 columns: table => new
                 {
                     UID = table.Column<string>(nullable: false),
-                    ConnectionID = table.Column<string>(maxLength: 250, nullable: true),
-                    Email = table.Column<string>(maxLength: 100, nullable: true),
-                    ProfilePic = table.Column<string>(nullable: true),
-                    FirstName = table.Column<string>(maxLength: 100, nullable: true),
-                    LastName = table.Column<string>(maxLength: 100, nullable: true),
-                    Bio = table.Column<string>(nullable: true),
-                    UserUID = table.Column<string>(nullable: true)
+                    PictureData = table.Column<string>(nullable: true),
+                    Likes = table.Column<int>(nullable: false),
+                    UserId = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Users", x => x.UID);
-                    table.ForeignKey(
-                        name: "FK_Users_Users_UserUID",
-                        column: x => x.UserUID,
-                        principalTable: "Users",
-                        principalColumn: "UID",
-                        onDelete: ReferentialAction.Restrict);
+                    table.PrimaryKey("PK_Pictures", x => x.UID);
                 });
 
             migrationBuilder.CreateTable(
@@ -176,26 +168,6 @@ namespace Backend.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "Pictures",
-                columns: table => new
-                {
-                    UID = table.Column<string>(nullable: false),
-                    PictureData = table.Column<string>(nullable: true),
-                    Likes = table.Column<int>(nullable: false),
-                    UserId = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Pictures", x => x.UID);
-                    table.ForeignKey(
-                        name: "FK_Pictures_Users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Users",
-                        principalColumn: "UID",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -234,16 +206,6 @@ namespace Backend.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Pictures_UserId",
-                table: "Pictures",
-                column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Users_UserUID",
-                table: "Users",
-                column: "UserUID");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -271,9 +233,6 @@ namespace Backend.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
-
-            migrationBuilder.DropTable(
-                name: "Users");
         }
     }
 }

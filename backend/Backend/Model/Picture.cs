@@ -20,6 +20,6 @@ namespace Backend.Model
         public string UserId { get; set; }
         
         [NotMapped]
-        public virtual User User { get; set; }
+        public virtual ApplicationUser User { get; set; }
     }
 }

@@ -31,50 +31,11 @@ namespace Backend.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("UID");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Pictures");
-                });
-
-            modelBuilder.Entity("Backend.Model.User", b =>
-                {
-                    b.Property<string>("UID")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Bio")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ConnectionID")
-                        .HasColumnType("nvarchar(250)")
-                        .HasMaxLength(250);
-
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
-
-                    b.Property<string>("FirstName")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
-
-                    b.Property<string>("LastName")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
-
-                    b.Property<string>("ProfilePic")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserUID")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("UID");
-
-                    b.HasIndex("UserUID");
-
-                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -140,6 +101,10 @@ namespace Backend.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(256)")
                         .HasMaxLength(256);
@@ -191,6 +156,8 @@ namespace Backend.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("IdentityUser");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -273,18 +240,14 @@ namespace Backend.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("Backend.Model.Picture", b =>
+            modelBuilder.Entity("Backend.Model.ApplicationUser", b =>
                 {
-                    b.HasOne("Backend.Model.User", "User")
-                        .WithMany("Pictures")
-                        .HasForeignKey("UserId");
-                });
+                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
 
-            modelBuilder.Entity("Backend.Model.User", b =>
-                {
-                    b.HasOne("Backend.Model.User", null)
-                        .WithMany("Friends")
-                        .HasForeignKey("UserUID");
+                    b.Property<string>("ProfilePic")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasDiscriminator().HasValue("ApplicationUser");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

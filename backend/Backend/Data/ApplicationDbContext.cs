@@ -15,20 +15,20 @@ namespace Backend.Data
         {
         }
 
-        protected override void OnModelCreating(ModelBuilder builder)
-        {
-            base.OnModelCreating(builder);
+        //protected override void OnModelCreating(ModelBuilder builder)
+        //{
+        //    //base.OnModelCreating(builder);
 
-            builder.Entity<Picture>(entity =>
-            {
-                entity.HasOne(t => t.User)
-                .WithMany(t => t.Pictures)
-                .HasForeignKey(t => t.UserId)
-                .OnDelete(DeleteBehavior.ClientSetNull);
-            });
-        }
+        //    //builder.Entity<Picture>(entity =>
+        //    //{
+        //    //    entity.HasOne(t => t.User)
+        //    //    .WithMany(t => t.Pictures)
+        //    //    .HasForeignKey(t => t.UserId)
+        //    //    .OnDelete(DeleteBehavior.ClientSetNull);
+        //    //});
+        //}
 
-        public DbSet<User> Users { get; set; }
+        public DbSet<ApplicationUser> ApplicationUsers { get; set; }
 
         public DbSet<Picture> Pictures { get; set; }
 

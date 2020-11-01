@@ -23,8 +23,6 @@ namespace Backend.Model
         [StringLength(100)]
         public string Email { get; set; }
 
-        [NotNull]
-        public string ProfilePic { get; set; }
 
         [NotNull]
         [StringLength(100)]
