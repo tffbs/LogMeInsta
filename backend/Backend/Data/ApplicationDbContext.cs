@@ -32,5 +32,7 @@ namespace Backend.Data
 
         public DbSet<Picture> Pictures { get; set; }
 
+        public DbSet<FriendRequest> Requests { get; set; }
+
     }
 }

@@ -19,9 +19,30 @@ namespace Backend.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("Backend.Model.FriendRequest", b =>
+                {
+                    b.Property<string>("UID")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("CreatorId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("Time")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("UID");
+
+                    b.HasIndex("CreatorId");
+
+                    b.ToTable("FriendRequest");
+                });
+
             modelBuilder.Entity("Backend.Model.Picture", b =>
                 {
                     b.Property<string>("UID")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ApplicationUserId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("Likes")
@@ -34,6 +55,8 @@ namespace Backend.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("UID");
+
+                    b.HasIndex("ApplicationUserId");
 
                     b.ToTable("Pictures");
                 });
@@ -244,10 +267,40 @@ namespace Backend.Migrations
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
 
+                    b.Property<string>("ApplicationUserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Bio")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FirstName")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
+
+                    b.Property<string>("LastName")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
+
                     b.Property<string>("ProfilePic")
                         .HasColumnType("nvarchar(max)");
 
+                    b.HasIndex("ApplicationUserId");
+
                     b.HasDiscriminator().HasValue("ApplicationUser");
+                });
+
+            modelBuilder.Entity("Backend.Model.FriendRequest", b =>
+                {
+                    b.HasOne("Backend.Model.ApplicationUser", "Creator")
+                        .WithMany("Requests")
+                        .HasForeignKey("CreatorId");
+                });
+
+            modelBuilder.Entity("Backend.Model.Picture", b =>
+                {
+                    b.HasOne("Backend.Model.ApplicationUser", null)
+                        .WithMany("Pictures")
+                        .HasForeignKey("ApplicationUserId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -299,6 +352,13 @@ namespace Backend.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Backend.Model.ApplicationUser", b =>
+                {
+                    b.HasOne("Backend.Model.ApplicationUser", null)
+                        .WithMany("Friends")
+                        .HasForeignKey("ApplicationUserId");
                 });
 #pragma warning restore 612, 618
         }
