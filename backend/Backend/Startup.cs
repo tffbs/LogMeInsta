@@ -30,6 +30,7 @@ namespace Backend
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors();
             services.AddControllers();
             services.AddDbContext<ApplicationDbContext>(opt =>
             {
@@ -38,6 +39,7 @@ namespace Backend
                 opt.UseLazyLoadingProxies();
                 opt.UseSqlServer(connection);
             });
+
 
             services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>();
             services.ConfigureApplicationCookie(options =>
