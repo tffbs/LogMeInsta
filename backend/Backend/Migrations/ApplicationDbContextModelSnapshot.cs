@@ -34,7 +34,7 @@ namespace Backend.Migrations
 
                     b.HasIndex("CreatorId");
 
-                    b.ToTable("FriendRequest");
+                    b.ToTable("Requests");
                 });
 
             modelBuilder.Entity("Backend.Model.Picture", b =>
@@ -274,8 +274,7 @@ namespace Backend.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FirstName")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LastName")
                         .HasColumnType("nvarchar(100)")

@@ -16,8 +16,8 @@ namespace Backend.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        UserManager<ApplicationUser> _userManager;
-        public AuthController(UserManager<ApplicationUser> _userManager)
+        UserManager<IdentityUser> _userManager;
+        public AuthController(UserManager<IdentityUser> _userManager)
         {
             this._userManager = _userManager;
         }
