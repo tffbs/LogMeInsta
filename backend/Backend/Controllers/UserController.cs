@@ -57,6 +57,8 @@ namespace Backend.Controllers
         //}
 
         [Authorize]
+        [Route("friends")]
+        [HttpGet]
         public IActionResult ListFriends()
         {
             //find currentUser
