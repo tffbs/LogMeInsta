@@ -30,31 +30,31 @@ namespace Backend.Controllers
             this.userManager = userManager;
         }
 
-        [Route("addfriend")]
-        public IActionResult AddFriend(string id)
-        {
-            //find currentUser
-            var myself = this.User;
-            var userObj = (ApplicationUser)userManager.GetUserAsync(myself).Result;
+        //[Route("addfriend")]
+        //public IActionResult AddFriend(string id)
+        //{
+        //    //find currentUser
+        //    var myself = this.User;
+        //    var userObj = (ApplicationUser)userManager.GetUserAsync(myself).Result;
 
-            //find his/her friend.
-            ApplicationUser friend = this.context.ApplicationUsers.Where(x => x.Id == id).FirstOrDefault();
-            if (friend.Id != null)
-            {
-                //Add the request in his/her friend request list.
-                friend.Requests.Add(new FriendRequest()
-                {
-                    Creator = userObj,
-                    Time = DateTime.Now,
-                    UID = Guid.NewGuid().ToString()
-                });
-                this.context.SaveChanges();
-                return Ok();
-            }
-            else
-                return BadRequest();
+        //    //find his/her friend.
+        //    ApplicationUser friend = this.context.ApplicationUsers.Where(x => x.Id == id).FirstOrDefault();
+        //    if (friend.Id != null)
+        //    {
+        //        //Add the request in his/her friend request list.
+        //        friend.Requests.Add(new FriendRequest()
+        //        {
+        //            Creator = userObj,
+        //            Time = DateTime.Now,
+        //            UID = Guid.NewGuid().ToString()
+        //        });
+        //        this.context.SaveChanges();
+        //        return Ok();
+        //    }
+        //    else
+        //        return BadRequest();
 
-        }
+        //}
 
         [Authorize]
         public IActionResult ListFriends()
@@ -78,16 +78,16 @@ namespace Backend.Controllers
             return new JsonResult(userObj.Requests);
         }
 
-        public IActionResult Feed()
-        {
-            //find currentUser
-            var myself = this.User;
-            var userObj = (ApplicationUser)userManager.GetUserAsync(myself).Result;
-            if (userObj.Id != null)
-                return Ok(userObj.Friends.Select(x => x.Pictures).ToList());
-            else
-                return BadRequest();
-        }
+        //public IActionResult Feed()
+        //{
+        //    //find currentUser
+        //    var myself = this.User;
+        //    var userObj = (ApplicationUser)userManager.GetUserAsync(myself).Result;
+        //    if (userObj.Id != null)
+        //        return Ok(userObj.Friends.Select(x => x.Pictures).ToList());
+        //    else
+        //        return BadRequest();
+        //}
 
         public IActionResult OwnPictures()
         {

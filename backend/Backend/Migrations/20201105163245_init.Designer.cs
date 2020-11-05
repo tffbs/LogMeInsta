@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Backend.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20201104125832_table_reCreated")]
-    partial class table_reCreated
+    [Migration("20201105163245_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -36,7 +36,7 @@ namespace Backend.Migrations
 
                     b.HasIndex("CreatorId");
 
-                    b.ToTable("FriendRequest");
+                    b.ToTable("Requests");
                 });
 
             modelBuilder.Entity("Backend.Model.Picture", b =>
@@ -276,8 +276,7 @@ namespace Backend.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FirstName")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LastName")
                         .HasColumnType("nvarchar(100)")

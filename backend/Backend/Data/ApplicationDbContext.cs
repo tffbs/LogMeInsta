@@ -4,8 +4,7 @@ using System.Text;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Backend.Model;
-
-
+using Microsoft.AspNetCore.Identity;
 
 namespace Backend.Data
 {
