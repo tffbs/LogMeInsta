@@ -124,10 +124,8 @@ namespace Backend.Controllers
         public IActionResult AcceptOrReject(string requestId, bool accepted)
         {
             //find currentUser
-            //ApplicationUser currentUser = (ApplicationUser)userManager.GetUserAsync(this.User).Result;
-            ApplicationUser currentUser = (ApplicationUser)userManager.FindByEmailAsync("almasipatrik3@gmail.com").Result;
-            FriendRequest request = userRepository.GetUserRequest("31f74bbf-a419-4efb-a107-5a60d710f7d8");
-            accepted = true;
+            ApplicationUser currentUser = (ApplicationUser)userManager.GetUserAsync(this.User).Result;
+            FriendRequest request = userRepository.GetUserRequest(requestId);
             if (request.UID == null)
                 return BadRequest();
 
