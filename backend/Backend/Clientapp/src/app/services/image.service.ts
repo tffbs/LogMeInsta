@@ -1,6 +1,7 @@
+import { PhotoCard } from './../models/photo';
 import { AppConfig } from './../config/config';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -10,17 +11,21 @@ export class ImageService {
 
   private pathAPI = this.config.setting['PathAPI'] + 'categories/';
 
-  private imagesBase64: Array<String> = new Array<String>();
+  private cardDetails: Array<PhotoCard> = new Array<PhotoCard>();
+
+  public cardDetailsEventEmitter: EventEmitter<Array<PhotoCard>> = new EventEmitter();
 
   constructor(private http: HttpClient, private config: AppConfig) { }
 
   public onUpload(file): Observable<any> {
-    this.imagesBase64.push(file);
+    let card = new PhotoCard(file, "DevUser");
+    this.cardDetails.push(card);
+    this.cardDetailsEventEmitter.next(this.cardDetails);
     return this.getMockObservable();
   }
 
-  public getImgesInBase64() {
-    return this.imagesBase64;
+  public getCardDetails() {
+    return this.cardDetails;
   }
 
   private delay(ms: number) {
