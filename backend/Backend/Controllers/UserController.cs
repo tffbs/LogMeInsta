@@ -4,10 +4,12 @@ using System.Threading.Tasks;
 using System.Transactions;
 using Backend.Data;
 using Backend.Model;
+using Backend.Repositories;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 namespace Backend.Controllers
 {
@@ -15,16 +17,15 @@ namespace Backend.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        ApplicationDbContext context;
         UserManager<IdentityUser> userManager;
         SignInManager<IdentityUser> signInManager;
+        UserRepository userRepository;
 
         public UserController(ApplicationDbContext context, UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager)
         {
-            this.context = context;
             this.userManager = userManager;
             this.signInManager = signInManager;
-
+            this.userRepository = new UserRepository(context);
         }
 
         [Route("addfriend")]
@@ -34,23 +35,14 @@ namespace Backend.Controllers
             //find currentUser
             ApplicationUser currentUser = (ApplicationUser)userManager.GetUserAsync(this.User).Result;
 
-            //find his/her friend.
-            ApplicationUser friend = this.context.ApplicationUsers.Where(x => x.Email == email).FirstOrDefault();
-            if (friend.Id != null)
+            if (userRepository.AddFriendRequest(email, currentUser))
             {
-                //Add the request in his/her friend request list.
-                friend.Requests.Add(new FriendRequest()
-                {
-                    Creator = friend,
-                    Time = DateTime.Now,
-                    UID = Guid.NewGuid().ToString()
-                });
-                this.context.SaveChanges();
                 return Ok();
             }
             else
+            {
                 return BadRequest();
-
+            }
         }
 
         [Authorize]
@@ -112,21 +104,23 @@ namespace Backend.Controllers
         {
             //find currentUser
             ApplicationUser currentUser = (ApplicationUser)userManager.GetUserAsync(this.User).Result;
-            FriendRequest request = currentUser.Requests.Where(x => x.UID == requestId).FirstOrDefault();
+
+            FriendRequest request = userRepository.GetUserRequest(requestId);
+
             if (request.UID == null)
                 return BadRequest();
 
             if (accepted)
             {
-                currentUser.Friends.Add(request.Creator);
-                currentUser.Requests.Remove(request);
+                userRepository.AddFriend(currentUser, request);
+                userRepository.RequestRemove(currentUser, request);
             }
             else
-                currentUser.Requests.Remove(request);
+            {
+                userRepository.RequestRemove(currentUser, request);
+            }
 
-            this.context.SaveChanges();
             return Ok();
-
         }
 
         [Route("addpicture")]
@@ -137,22 +131,13 @@ namespace Backend.Controllers
             ApplicationUser currentUser = (ApplicationUser)userManager.GetUserAsync(this.User).Result;
             if (currentUser.Id != null)
             {
-                currentUser.Pictures.Add(new Picture()
-                {
-                    UID = Guid.NewGuid().ToString(),
-                    User = currentUser,
-                    Likes = 0,
-                    PictureData = picture
-                });
-
-                this.context.SaveChanges();
+                userRepository.AddPicture(picture, currentUser);
+                return Ok();
             }
             else
+            {
                 return BadRequest();
-            return Ok();
-
+            }
         }
-
-
     }
 }
