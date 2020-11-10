@@ -45,6 +45,9 @@ namespace Backend.Controllers
                 {
                     Email = authenticateResult.Ticket.Principal.FindFirst(ClaimTypes.Email).Value,
                     UserName = authenticateResult.Ticket.Principal.FindFirst(ClaimTypes.Email).Value,
+                    FirstName = authenticateResult.Ticket.Principal.FindFirst(ClaimTypes.GivenName).Value,
+                    LastName = authenticateResult.Ticket.Principal.FindFirst(ClaimTypes.Surname).Value,
+                    Id = authenticateResult.Ticket.Principal.FindFirst(ClaimTypes.NameIdentifier).Value,
                 });
                 if (!result.Succeeded)
                     throw new System.Exception("User creation failed.");
