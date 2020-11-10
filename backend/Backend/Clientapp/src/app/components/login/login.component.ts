@@ -39,6 +39,10 @@ export class LoginComponent implements OnInit {
     this.auth.signin().subscribe(x =>
       {
         console.log(x)
+        
+      },
+      (error) => {
+        window.location.href = error.url;
       }
       );
 
