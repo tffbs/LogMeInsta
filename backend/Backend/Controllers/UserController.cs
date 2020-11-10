@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Transactions;
 using Backend.Data;
 using Backend.Model;
 using Microsoft.AspNetCore.Authentication;
@@ -127,5 +128,31 @@ namespace Backend.Controllers
             return Ok();
 
         }
+
+        [Route("addpicture")]
+        [HttpPost]
+        public IActionResult AddPicture(string picture)
+        {
+            //find currentUser
+            ApplicationUser currentUser = (ApplicationUser)userManager.GetUserAsync(this.User).Result;
+            if (currentUser.Id != null)
+            {
+                currentUser.Pictures.Add(new Picture()
+                {
+                    UID = Guid.NewGuid().ToString(),
+                    User = currentUser,
+                    Likes = 0,
+                    PictureData = picture
+                });
+
+                this.context.SaveChanges();
+            }
+            else
+                return BadRequest();
+            return Ok();
+
+        }
+
+
     }
 }
