@@ -11,14 +11,13 @@ import { Router } from '@angular/router';
 export class AppComponent implements OnInit {
   subscription: Subscription;
 
-  isAuthenticated: boolean = false;
+  isAuthenticated: boolean = true;
   constructor(private helpers: Helpers, private router: Router) { }
 
   ngOnInit(): void {
   }
 
   ngAfterViewInit() {
-    this.subscription = this.helpers.isAuthenticated().subscribe(x => this.isAuthenticated = x)
   }
   
   title = 'webapp';

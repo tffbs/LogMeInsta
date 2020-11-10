@@ -13,6 +13,7 @@ export class LoginComponent implements OnInit {
   constructor(private helpers: Helpers, private auth: AuthService) {}
 
   ngOnInit() {
+    this.loginDev();
   }
 
   loginDev() {
@@ -20,23 +21,9 @@ export class LoginComponent implements OnInit {
     document.body.classList.remove('bg-img');
   }
 
-  // submitLogin() {
-  //   console.log('submit login to facebook');
-  //   this.auth.signin().subscribe(x =>
-  //     {
-  //       console.log(x)
-  //     },
-  //     (error) => {
-  //       console.log(error);
-  //       window.location.href = error.url;
-  //     }
-  //     );
-
-  // }
-
   submitLogin() {
     console.log('submit login to facebook');
-    this.auth.signin().subscribe(x =>
+    this.auth.listfriends().subscribe(x =>
       {
         console.log(x)
         

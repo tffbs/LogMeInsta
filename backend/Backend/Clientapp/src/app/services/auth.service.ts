@@ -1,5 +1,5 @@
 import { AppConfig } from './../config/config';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
@@ -22,7 +22,10 @@ export class AuthService {
   public listfriends(): Observable<any> {
     let path = this.config.setting['PathAPI'] + "user/friends";
     console.log(path);
-    return this.http.get(path, this.getReturnUrlHeader2(path));
+    let headers = new HttpHeaders();
+    headers.append('Content-Type', 'application/json');
+    let params = new HttpParams().set("ReturnUrl","http://localhost:4200/");
+    return this.http.get(path, {params: params });
   }
 
   private getReturnUrlHeader(){
