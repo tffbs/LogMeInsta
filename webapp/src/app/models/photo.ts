@@ -6,7 +6,6 @@ export class PhotoCard{
     constructor(image, username) {
         this.image = image;
         this.username = username;
-        
     }
 
 }
