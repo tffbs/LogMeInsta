@@ -1,5 +1,7 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
+using System.Transactions;
 using Backend.Data;
 using Backend.Model;
 using Microsoft.AspNetCore.Authentication;
@@ -25,34 +27,35 @@ namespace Backend.Controllers
 
         }
 
-        //[Route("addfriend")]
-        //public IActionResult AddFriend(string id)
-        //{
-        //    //find currentUser
-        //    var myself = this.User;
-        //    var userObj = (ApplicationUser)userManager.GetUserAsync(myself).Result;
+        [Route("addfriend")]
+        [HttpPost]
+        public IActionResult AddFriend(string email)
+        {
+            //find currentUser
+            ApplicationUser currentUser = (ApplicationUser)userManager.GetUserAsync(this.User).Result;
 
-        //    //find his/her friend.
-        //    ApplicationUser friend = this.context.ApplicationUsers.Where(x => x.Id == id).FirstOrDefault();
-        //    if (friend.Id != null)
-        //    {
-        //        //Add the request in his/her friend request list.
-        //        friend.Requests.Add(new FriendRequest()
-        //        {
-        //            Creator = userObj,
-        //            Time = DateTime.Now,
-        //            UID = Guid.NewGuid().ToString()
-        //        });
-        //        this.context.SaveChanges();
-        //        return Ok();
-        //    }
-        //    else
-        //        return BadRequest();
+            //find his/her friend.
+            ApplicationUser friend = this.context.ApplicationUsers.Where(x => x.Email == email).FirstOrDefault();
+            if (friend.Id != null)
+            {
+                //Add the request in his/her friend request list.
+                friend.Requests.Add(new FriendRequest()
+                {
+                    Creator = friend,
+                    Time = DateTime.Now,
+                    UID = Guid.NewGuid().ToString()
+                });
+                this.context.SaveChanges();
+                return Ok();
+            }
+            else
+                return BadRequest();
 
-        //}
+        }
 
         [Authorize]
         [Route("friends")]
+        [HttpGet]
         public IActionResult ListFriends()
         {
             //find currentUser
@@ -69,6 +72,8 @@ namespace Backend.Controllers
         //{
         //}
 
+        [Route("requests")]
+        [HttpGet]
         public JsonResult GetFriendRequests()
         {
             //find currentUser
@@ -77,17 +82,20 @@ namespace Backend.Controllers
             return new JsonResult(currentUser.Requests);
         }
 
-        //public IActionResult Feed()
-        //{
-        //    //find currentUser
-        //    var myself = this.User;
-        //    var userObj = (ApplicationUser)userManager.GetUserAsync(myself).Result;
-        //    if (userObj.Id != null)
-        //        return Ok(userObj.Friends.Select(x => x.Pictures).ToList());
-        //    else
-        //        return BadRequest();
-        //}
+        [Route("feed")]
+        [HttpGet]
+        public IActionResult Feed()
+        {
+            //find currentUser
+            ApplicationUser currentUser = (ApplicationUser)userManager.GetUserAsync(this.User).Result;
+            if (currentUser.Id != null)
+                return Ok(currentUser.Friends.Select(x => x.Pictures).ToList());
+            else
+                return BadRequest();
+        }
 
+        [Route("profile")]
+        [HttpGet]
         public IActionResult OwnPictures()
         {
             //find currentUser
@@ -98,6 +106,8 @@ namespace Backend.Controllers
                 return BadRequest();
         }
 
+        [Route("acceptorreject")]
+        [HttpPost]
         public IActionResult AcceptOrReject(string requestId, bool accepted)
         {
             //find currentUser
@@ -118,5 +128,31 @@ namespace Backend.Controllers
             return Ok();
 
         }
+
+        [Route("addpicture")]
+        [HttpPost]
+        public IActionResult AddPicture(string picture)
+        {
+            //find currentUser
+            ApplicationUser currentUser = (ApplicationUser)userManager.GetUserAsync(this.User).Result;
+            if (currentUser.Id != null)
+            {
+                currentUser.Pictures.Add(new Picture()
+                {
+                    UID = Guid.NewGuid().ToString(),
+                    User = currentUser,
+                    Likes = 0,
+                    PictureData = picture
+                });
+
+                this.context.SaveChanges();
+            }
+            else
+                return BadRequest();
+            return Ok();
+
+        }
+
+
     }
 }

@@ -171,15 +171,14 @@ namespace Backend.Migrations
                     UID = table.Column<string>(nullable: false),
                     PictureData = table.Column<string>(nullable: true),
                     Likes = table.Column<int>(nullable: false),
-                    UserId = table.Column<string>(nullable: true),
-                    ApplicationUserId = table.Column<string>(nullable: true)
+                    UserId = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Pictures", x => x.UID);
                     table.ForeignKey(
-                        name: "FK_Pictures_AspNetUsers_ApplicationUserId",
-                        column: x => x.ApplicationUserId,
+                        name: "FK_Pictures_AspNetUsers_UserId",
+                        column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -249,9 +248,9 @@ namespace Backend.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Pictures_ApplicationUserId",
+                name: "IX_Pictures_UserId",
                 table: "Pictures",
-                column: "ApplicationUserId");
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Requests_CreatorId",
