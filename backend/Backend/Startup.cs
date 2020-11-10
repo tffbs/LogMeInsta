@@ -44,7 +44,6 @@ namespace Backend
                 opt.UseSqlServer(connection);
             });
 
-
             services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>();
             services.ConfigureApplicationCookie(options =>
             {
