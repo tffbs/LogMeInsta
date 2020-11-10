@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Backend.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20201110094317_init")]
-    partial class init
+    [Migration("20201110231305_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -44,9 +44,6 @@ namespace Backend.Migrations
                     b.Property<string>("UID")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("ApplicationUserId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<int>("Likes")
                         .HasColumnType("int");
 
@@ -54,11 +51,11 @@ namespace Backend.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("UID");
 
-                    b.HasIndex("ApplicationUserId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Pictures");
                 });
@@ -299,9 +296,9 @@ namespace Backend.Migrations
 
             modelBuilder.Entity("Backend.Model.Picture", b =>
                 {
-                    b.HasOne("Backend.Model.ApplicationUser", null)
+                    b.HasOne("Backend.Model.ApplicationUser", "User")
                         .WithMany("Pictures")
-                        .HasForeignKey("ApplicationUserId");
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

@@ -1,3 +1,4 @@
+import { SearchService } from './../../services/search.service';
 import { Component, OnInit } from '@angular/core';
 import { ToastService } from './../../services/toast.service';
 
@@ -8,7 +9,7 @@ export class AppModule {}
   styleUrls: ['./users.component.css'],
 })
 export class UsersComponent implements OnInit {
-  constructor(private toastService: ToastService) {}
+  constructor(private toastService: ToastService, private searchService: SearchService) {}
   title = 'Search Users';
   searchText;
   users = [
@@ -57,5 +58,9 @@ export class UsersComponent implements OnInit {
       this.users.find((x) => x.id == user).isFriend = 'assets/img//remove.png';
     }
     // FB.login();
+  }
+
+  getFriends(){
+    this.searchService.getFriends().subscribe(x => console.log(x));
   }
 }
