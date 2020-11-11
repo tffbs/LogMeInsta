@@ -19,13 +19,11 @@ namespace Backend.Controllers
     public class UserController : ControllerBase
     {
         UserManager<IdentityUser> userManager;
-        SignInManager<IdentityUser> signInManager;
         UserRepository userRepository;
 
-        public UserController(ApplicationDbContext context, UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager)
+        public UserController(ApplicationDbContext context, UserManager<IdentityUser> userManager)
         {
             this.userManager = userManager;
-            this.signInManager = signInManager;
             this.userRepository = new UserRepository(context);
         }
 
@@ -45,7 +43,6 @@ namespace Backend.Controllers
             }
         }
 
-        [Authorize]
         [Route("friends")]
         public IActionResult ListFriends()
         {
@@ -61,12 +58,6 @@ namespace Backend.Controllers
             else
                 return BadRequest();
         }
-
-        //[Authorize]
-        //[Route("logout")]
-        //public async Task<IActionResult> LogOut(string returnUrl = null)
-        //{
-        //}
 
         [Route("requests")]
         public IActionResult GetFriendRequests()
@@ -156,15 +147,6 @@ namespace Backend.Controllers
             {
                 return BadRequest();
             }
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [Route("logout")]
-        public async Task<IActionResult> Logout()
-        {
-            await signInManager.SignOutAsync();
-            return this.LocalRedirect("https://localhost:44340/logout");
         }
 
     }

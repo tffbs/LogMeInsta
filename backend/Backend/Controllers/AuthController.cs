@@ -17,9 +17,11 @@ namespace Backend.Controllers
     public class AuthController : ControllerBase
     {
         UserManager<IdentityUser> _userManager;
-        public AuthController(UserManager<IdentityUser> _userManager)
+        SignInManager<IdentityUser> signInManager;
+        public AuthController(UserManager<IdentityUser> _userManager, SignInManager<IdentityUser> signInManager)
         {
             this._userManager = _userManager;
+            this.signInManager = signInManager;
         }
 
 
@@ -36,7 +38,7 @@ namespace Backend.Controllers
         {
             var authenticateResult = await HttpContext.AuthenticateAsync(IdentityConstants.ExternalScheme);
             //TODO IF AUTHENTICATION IS NOT SUCCESSFUL
-
+            
             var user = await _userManager.FindByEmailAsync(authenticateResult.Ticket.Principal
                 .FindFirst(ClaimTypes.Email).Value);
             if(user == null)
@@ -56,6 +58,15 @@ namespace Backend.Controllers
             await HttpContext.SignInAsync(IdentityConstants.ApplicationScheme,
                 new ClaimsPrincipal(authenticateResult.Ticket.Principal.Identity));
             return this.LocalRedirect(returnUrl);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Route("logout")]
+        public async Task<IActionResult> Logout()
+        {
+            await signInManager.SignOutAsync();
+            return this.LocalRedirect("https://localhost:44340/logout");
         }
     }
 }
