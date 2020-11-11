@@ -47,9 +47,9 @@ namespace Backend.Repositories
             this.context.SaveChanges();
         }
 
-        public void RequestRemove(ApplicationUser currentUser, FriendRequest fr)
+        public void RequestRemove(FriendRequest fr)
         {
-            currentUser.Requests.Remove(fr);
+            this.context.Requests.Remove(fr);
             this.context.SaveChanges();
         }
 

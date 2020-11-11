@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 namespace Backend.Controllers
 {
+    [Authorize]
     [Route("[controller]")]
     [ApiController]
     public class UserController : ControllerBase
@@ -29,7 +30,6 @@ namespace Backend.Controllers
         }
 
         [Route("addfriend")]
-        [HttpPost]
         public IActionResult AddFriend(string email)
         {
             //find currentUser
@@ -47,13 +47,17 @@ namespace Backend.Controllers
 
         [Authorize]
         [Route("friends")]
-        [HttpGet]
         public IActionResult ListFriends()
         {
             //find currentUser
             ApplicationUser currentUser = (ApplicationUser)userManager.GetUserAsync(this.User).Result;
             if (currentUser.Id != null)
-                return Ok(currentUser.Friends);
+                return Ok(currentUser.Friends.Select(x => new
+                {
+                    FirstName = x.FirstName,
+                    LastName = x.LastName,
+                    Email = x.Email
+                }));
             else
                 return BadRequest();
         }
@@ -65,66 +69,80 @@ namespace Backend.Controllers
         //}
 
         [Route("requests")]
-        [HttpGet]
-        public JsonResult GetFriendRequests()
+        public IActionResult GetFriendRequests()
         {
             //find currentUser
             ApplicationUser currentUser = (ApplicationUser)userManager.GetUserAsync(this.User).Result;
-
-            return new JsonResult(currentUser.Requests);
+            return Ok(currentUser.Requests.Select(x =>
+            new
+            {
+                x.Creator.LastName,
+                x.Creator.FirstName,
+                x.Creator.Email
+            }).ToList());
         }
 
         [Route("feed")]
-        [HttpGet]
         public IActionResult Feed()
         {
             //find currentUser
             ApplicationUser currentUser = (ApplicationUser)userManager.GetUserAsync(this.User).Result;
             if (currentUser.Id != null)
-                return Ok(currentUser.Friends.Select(x => x.Pictures).ToList());
+                return Ok(currentUser.Friends.Select(x => new
+                {
+                    FirstName = x.FirstName,
+                    LastName = x.LastName,
+                    Email = x.Email,
+                    Pictures = x.Pictures.Select(y => new
+                    {
+                        Likes = y.Likes,
+                        Picture = y.PictureData,
+                        Uid = y.UID
+                    })
+                }));
             else
                 return BadRequest();
         }
 
         [Route("profile")]
-        [HttpGet]
         public IActionResult OwnPictures()
         {
             //find currentUser
             ApplicationUser currentUser = (ApplicationUser)userManager.GetUserAsync(this.User).Result;
             if (currentUser.Id != null)
-                return Ok(currentUser.Pictures);
+                return Ok(currentUser.Pictures.Select(x => new
+                {
+                    Likes = x.Likes,
+                    Picture = x.PictureData,
+                    Uid = x.UID
+                }));
             else
                 return BadRequest();
         }
 
         [Route("acceptorreject")]
-        [HttpPost]
         public IActionResult AcceptOrReject(string requestId, bool accepted)
         {
             //find currentUser
             ApplicationUser currentUser = (ApplicationUser)userManager.GetUserAsync(this.User).Result;
-
             FriendRequest request = userRepository.GetUserRequest(requestId);
-
             if (request.UID == null)
                 return BadRequest();
 
             if (accepted)
             {
                 userRepository.AddFriend(currentUser, request);
-                userRepository.RequestRemove(currentUser, request);
+                userRepository.RequestRemove(request);
             }
             else
             {
-                userRepository.RequestRemove(currentUser, request);
+                userRepository.RequestRemove(request);
             }
 
             return Ok();
         }
 
         [Route("addpicture")]
-        [HttpPost]
         public IActionResult AddPicture(string picture)
         {
             //find currentUser
