@@ -23,14 +23,14 @@ export class LoginComponent implements OnInit {
 
   submitLogin() {
     console.log('submit login to facebook');
-    this.auth.listfriends().subscribe(x =>
+    this.auth.signin().subscribe(x =>
       {
         console.log(x)
         
       },
-      (error) => {
-        window.location.href = error.url;
-      }
+      // (error) => {
+      //   window.location.href = error.url;
+      // }
       );
 
   }

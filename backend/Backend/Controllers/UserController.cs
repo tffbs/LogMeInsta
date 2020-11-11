@@ -13,7 +13,6 @@ using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 namespace Backend.Controllers
 {
-    [Authorize]
     [Route("[controller]")]
     [ApiController]
     public class UserController : ControllerBase
@@ -45,7 +44,6 @@ namespace Backend.Controllers
             }
         }
 
-        [Authorize]
         [Route("friends")]
         public IActionResult ListFriends()
         {

@@ -1,3 +1,4 @@
+import { AuthService } from './../../services/auth.service';
 import { SearchService } from './../../services/search.service';
 import { Component, OnInit } from '@angular/core';
 import { ToastService } from './../../services/toast.service';
@@ -9,7 +10,7 @@ export class AppModule {}
   styleUrls: ['./users.component.css'],
 })
 export class UsersComponent implements OnInit {
-  constructor(private toastService: ToastService, private searchService: SearchService) {}
+  constructor(private toastService: ToastService, private searchService: SearchService, private authService: AuthService) {}
   title = 'Search Users';
   searchText;
   users = [
@@ -61,6 +62,6 @@ export class UsersComponent implements OnInit {
   }
 
   getFriends(){
-    this.searchService.getFriends().subscribe(x => console.log(x));
+    this.authService.listfriends().subscribe(x => console.log(x));
   }
 }
