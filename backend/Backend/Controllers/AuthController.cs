@@ -60,13 +60,12 @@ namespace Backend.Controllers
             return this.LocalRedirect(returnUrl);
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+        //[HttpPost]
         [Route("logout")]
         public async Task<IActionResult> Logout()
         {
             await signInManager.SignOutAsync();
-            return this.LocalRedirect("https://localhost:44340/logout");
+            return this.Redirect("https://localhost:44340/login");
         }
     }
 }
