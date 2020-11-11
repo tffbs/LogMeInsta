@@ -157,5 +157,15 @@ namespace Backend.Controllers
                 return BadRequest();
             }
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Route("logout")]
+        public async Task<IActionResult> Logout()
+        {
+            await signInManager.SignOutAsync();
+            return this.LocalRedirect("https://localhost:44340/logout");
+        }
+
     }
 }
