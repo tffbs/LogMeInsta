@@ -62,6 +62,9 @@ export class UsersComponent implements OnInit {
   }
 
   getFriends(){
-    this.authService.listfriends().subscribe(x => console.log(x));
+    this.authService.listfriends().subscribe(
+      x => console.log(x),
+      (error) => window.location.href = error.url
+      );
   }
 }

@@ -44,6 +44,7 @@ namespace Backend.Controllers
             }
         }
 
+        [Authorize]
         [Route("friends")]
         public IActionResult ListFriends()
         {

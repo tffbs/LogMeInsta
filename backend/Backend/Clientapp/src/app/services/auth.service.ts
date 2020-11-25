@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 })
 export class AuthService {
 
-  private pathAPI = this.config.setting['PathAPI'] + 'auth/';
+  private pathAPI = this.config.setting['PathAPI'];
 
   constructor(private http: HttpClient, private config: AppConfig) { }
 
@@ -23,7 +23,8 @@ export class AuthService {
   public listfriends(): Observable<any> {
     let path = this.config.setting['PathAPI'] + "user/friends";
     console.log(path);
-    return this.http.get(path);
+    let params = new HttpParams().set("ReturnUrl","https://localhost:44340/profile");
+    return this.http.get(path, {params: params });
   }
 
   private getReturnUrlHeader(){
