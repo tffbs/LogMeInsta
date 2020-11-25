@@ -49,12 +49,16 @@ namespace Backend.Controllers
             //find currentUser
             ApplicationUser currentUser = (ApplicationUser)userManager.GetUserAsync(this.User).Result;
             if (currentUser.Id != null)
+            {
+                currentUser.Friends.Add(new ApplicationUser() { Id = Guid.NewGuid().ToString(), FirstName = "TESZT", LastName = "ADAT", Email = "teszt@adat.com" });
                 return Ok(currentUser.Friends.Select(x => new
                 {
                     FirstName = x.FirstName,
                     LastName = x.LastName,
                     Email = x.Email
                 }));
+            }
+
             else
                 return BadRequest();
         }
