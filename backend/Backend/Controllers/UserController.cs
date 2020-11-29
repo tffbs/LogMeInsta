@@ -5,6 +5,7 @@ using System.Transactions;
 using Backend.Data;
 using Backend.Model;
 using Backend.Repositories;
+using Backend.Service;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -20,11 +21,13 @@ namespace Backend.Controllers
     {
         UserManager<IdentityUser> userManager;
         UserRepository userRepository;
+        IImageService imageService;
 
-        public UserController(ApplicationDbContext context, UserManager<IdentityUser> userManager)
+        public UserController(ApplicationDbContext context, UserManager<IdentityUser> userManager, IImageService imageService)
         {
             this.userManager = userManager;
             this.userRepository = new UserRepository(context);
+            this.imageService = imageService;
         }
 
         [Route("addfriend")]
@@ -48,19 +51,13 @@ namespace Backend.Controllers
         {
             //find currentUser
             ApplicationUser currentUser = (ApplicationUser)userManager.GetUserAsync(this.User).Result;
-            if (currentUser.Id != null)
+            currentUser.Friends.Add(new ApplicationUser() { Id = Guid.NewGuid().ToString(), FirstName = "TESZT", LastName = "ADAT", Email = "teszt@adat.com" });
+            return Ok(currentUser.Friends.Select(x => new
             {
-                currentUser.Friends.Add(new ApplicationUser() { Id = Guid.NewGuid().ToString(), FirstName = "TESZT", LastName = "ADAT", Email = "teszt@adat.com" });
-                return Ok(currentUser.Friends.Select(x => new
-                {
-                    FirstName = x.FirstName,
-                    LastName = x.LastName,
-                    Email = x.Email
-                }));
-            }
-
-            else
-                return BadRequest();
+                FirstName = x.FirstName,
+                LastName = x.LastName,
+                Email = x.Email
+            }));
         }
 
         [Route("requests")]
@@ -82,7 +79,6 @@ namespace Backend.Controllers
         {
             //find currentUser
             ApplicationUser currentUser = (ApplicationUser)userManager.GetUserAsync(this.User).Result;
-            if (currentUser.Id != null)
                 return Ok(currentUser.Friends.Select(x => new
                 {
                     FirstName = x.FirstName,
@@ -95,8 +91,6 @@ namespace Backend.Controllers
                         Uid = y.UID
                     })
                 }));
-            else
-                return BadRequest();
         }
 
         [Route("profile")]
@@ -104,15 +98,12 @@ namespace Backend.Controllers
         {
             //find currentUser
             ApplicationUser currentUser = (ApplicationUser)userManager.GetUserAsync(this.User).Result;
-            if (currentUser.Id != null)
                 return Ok(currentUser.Pictures.Select(x => new
                 {
                     Likes = x.Likes,
                     Picture = x.PictureData,
                     Uid = x.UID
                 }));
-            else
-                return BadRequest();
         }
 
         [Route("acceptorreject")]
@@ -137,20 +128,12 @@ namespace Backend.Controllers
             return Ok();
         }
 
-        [Route("addpicture")]
-        public IActionResult AddPicture(string picture)
+        [HttpPost]
+        [Route("upload")]
+        public async Task AddPicture(IFormFile file)
         {
-            //find currentUser
-            ApplicationUser currentUser = (ApplicationUser)userManager.GetUserAsync(this.User).Result;
-            if (currentUser.Id != null)
-            {
-                userRepository.AddPicture(picture, currentUser);
-                return Ok();
-            }
-            else
-            {
-                return BadRequest();
-            }
+            var currentUser = await userManager.GetUserAsync(this.User);
+            await this.imageService.SaveImageAsync(file, currentUser);
         }
 
     }

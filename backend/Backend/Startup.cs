@@ -21,6 +21,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Azure.CognitiveServices.Vision.ComputerVision;
+using Backend.Service;
+using Backend.Repositories;
 
 namespace Backend
 {
@@ -81,8 +84,11 @@ namespace Backend
                 configuration.RootPath = "ClientApp/dist";
             });
 
-        }
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IImageService, ImageService>();
+            services.AddSingleton(s => new ComputerVisionClient(new ApiKeyServiceClientCredentials(Configuration["AzureCognitiveRecog:Vision:Key"])) { Endpoint = Configuration["AzureCognitiveRecog:Vision:Endpoint"] });
 
+        }
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())

@@ -14,7 +14,7 @@ namespace Backend.Model
         [Key]
         public string UID { get; set; }
 
-        public string PictureData { get; set; }
+        public byte[] PictureData { get; set; }
 
         public int Likes { get; set; }
 
