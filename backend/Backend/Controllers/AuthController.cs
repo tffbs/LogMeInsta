@@ -16,7 +16,6 @@ namespace Backend.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private string returnURL = "https://localhost:44340";
         UserManager<IdentityUser> _userManager;
         SignInManager<IdentityUser> signInManager;
         public AuthController(UserManager<IdentityUser> _userManager, SignInManager<IdentityUser> signInManager)
@@ -29,7 +28,7 @@ namespace Backend.Controllers
         [Route("signin")]
         public IActionResult SignInWithFacebook(string ReturnUrl)
         {
-            var redirectUrl = Url.Action(nameof(AuthController.SignInCallback), "auth", new { returnUrl = returnURL });
+            var redirectUrl = Url.Action(nameof(AuthController.SignInCallback), "auth", new { returnUrl = "/"});
             return Challenge(new AuthenticationProperties { RedirectUri = redirectUrl }, FacebookDefaults.AuthenticationScheme);
         }
 
