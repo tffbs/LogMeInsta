@@ -1,0 +1,14 @@
+
+
+<div class="container centered">
+    <h2>{{profileUserName}}</h2>
+    <h4>Friends: {{numberOfFriends}}</h4>
+    <h4>Uploads: {{numberOfUploads}}</h4>
+
+    <h3>My Images</h3>
+</div>
+
+
+<div class = "container card" *ngFor="let detail of photos">
+    <app-photocard [image]="detail.image" [userName]="detail.username"></app-photocard>
+</div>
