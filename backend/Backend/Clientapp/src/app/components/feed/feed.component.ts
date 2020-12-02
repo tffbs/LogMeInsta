@@ -1,3 +1,4 @@
+import { UserService } from './../../services/user.service';
 import { FriendsService } from './../../services/friends.service';
 import { Subscription } from 'rxjs';
 import { ImageService } from './../../services/image.service';
@@ -13,9 +14,10 @@ export class FeedComponent implements OnInit, OnDestroy {
 
   cardDetails: Array<PhotoCard>;
 
-  constructor(private imageService: ImageService, private friendsService: FriendsService) {  }
+  constructor(private imageService: ImageService, private friendsService: FriendsService, private userService: UserService) {  }
 
   ngOnInit(): void {
+    this.userService.getFeed().subscribe(x => console.log(x));
   }
 
   ngOnDestroy(): void {

@@ -10,7 +10,8 @@
     <p>You have new request(s)</p>
     <div *ngFor="let request of requests" class="card">
         <h4>Name: {{request.firstName + " " + request.lastName}}</h4>
-
+        <button (click)="acceptRequest(request.requestId)" class="btn btn-success">Accept</button>
+        <button (click)="declineRequest(request.requestId)" class="btn btn-danger">Decline</button>
     </div>
 </div>
 

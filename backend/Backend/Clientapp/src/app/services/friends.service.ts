@@ -8,6 +8,7 @@ import { Observable } from 'rxjs';
     providedIn: 'root'
   })
   export class FriendsService {
+
     private pathAPI = this.config.setting['PathAPI'] + 'user/';
   
     constructor(private http: HttpClient, private config: AppConfig) { }
@@ -47,6 +48,16 @@ import { Observable } from 'rxjs';
       getRequests(): Observable<Request[]>{
         let path = this.pathAPI + "requests";
         console.log(path);
-        return this.http.get<Request[]>(path);      }
+        return this.http.get<Request[]>(path);      
+      }
+
+      acceptOrDeclineRequest(requestId: string, accept: boolean) {
+        let path = this.pathAPI + "acceptorreject";
+        console.log(path);
+        let params = new HttpParams();
+        params = params.append('requestId', requestId);
+        params = params.append('accept', accept ? "true" : "false");
+        return this.http.get(path, {params: params})
+      }
   }
   

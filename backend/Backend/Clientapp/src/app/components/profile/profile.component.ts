@@ -1,3 +1,5 @@
+import { ToastService } from './../../services/toast.service';
+import { Subscription } from 'rxjs';
 import { User } from './../../model/user.model';
 import { UserService } from './../../services/user.service';
 import { Request } from './../../model/request.model';
@@ -17,7 +19,7 @@ export class ProfileComponent implements OnInit {
   requests: Request[] = [];
 
 
-  constructor(private friendsService: FriendsService, private userService: UserService) { }
+  constructor(private friendsService: FriendsService, private userService: UserService, private toastService: ToastService) { }
 
   ngOnInit(): void {
     this.getRequests();
@@ -37,5 +39,20 @@ export class ProfileComponent implements OnInit {
       this.user = x
       console.log(this.user)
     })
+  }
+
+  acceptRequest(requestId: string){
+    this.friendsService.acceptOrDeclineRequest(requestId, true).subscribe(
+      x => {
+        this.toastService.show('Accepted request', { classname: 'bg-success text-light', delay: 2000 });
+      }
+    );
+  }
+
+  declineRequest(requestId: string){
+    this.friendsService.acceptOrDeclineRequest(requestId, false).subscribe(x => {
+      this.toastService.show('Declined request', { classname: 'bg-danger text-light', delay: 2000 });
+
+    });
   }
 }

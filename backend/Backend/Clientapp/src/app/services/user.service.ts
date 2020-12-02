@@ -8,6 +8,7 @@ import { Observable } from 'rxjs';
     providedIn: 'root'
   })
   export class UserService {
+
   
     private pathAPI = this.config.setting['PathAPI'] + 'user/';
   
@@ -16,6 +17,12 @@ import { Observable } from 'rxjs';
   
     public getInfo(): Observable<User> {
       let path = this.pathAPI + "userinfo";
+      console.log(path);
+      return this.http.get<User>(path);
+    }
+
+    getFeed(): Observable<User> {
+      let path = this.pathAPI + "feed";
       console.log(path);
       return this.http.get<User>(path);
     }

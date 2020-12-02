@@ -132,7 +132,12 @@ namespace Backend.Controllers
                 Email = currentUser.Email,
                 ProfilePicture = currentUser.ProfilePic,
                 friends = currentUser.Friends,
-                pictures = currentUser.Pictures
+                //Pictures = currentUser.Pictures.Select(y => new
+                //{
+                //    Likes = y.Likes,
+                //    Picture = y.PictureData,
+                //    Uid = y.UID
+                //})
             });
         }
 
