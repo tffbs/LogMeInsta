@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Transactions;
 using Backend.Data;
 using Backend.Model;
 using Backend.Repositories;
+using Backend.Service;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -20,11 +22,13 @@ namespace Backend.Controllers
     {
         UserManager<IdentityUser> userManager;
         UserRepository userRepository;
+        IImageService imageService;
 
-        public UserController(ApplicationDbContext context, UserManager<IdentityUser> userManager)
+        public UserController(ApplicationDbContext context, UserManager<IdentityUser> userManager, IImageService imageService)
         {
             this.userManager = userManager;
             this.userRepository = new UserRepository(context);
+            this.imageService = imageService;
         }
 
         [Route("addfriend")]
@@ -48,15 +52,13 @@ namespace Backend.Controllers
         {
             //find currentUser
             ApplicationUser currentUser = (ApplicationUser)userManager.GetUserAsync(this.User).Result;
-            if (currentUser.Id != null)
-                return Ok(currentUser.Friends.Select(x => new
-                {
-                    FirstName = x.FirstName,
-                    LastName = x.LastName,
-                    Email = x.Email
-                }));
-            else
-                return BadRequest();
+            currentUser.Friends.Add(new ApplicationUser() { Id = Guid.NewGuid().ToString(), FirstName = "TESZT", LastName = "ADAT", Email = "teszt@adat.com" });
+            return Ok(currentUser.Friends.Select(x => new
+            {
+                FirstName = x.FirstName,
+                LastName = x.LastName,
+                Email = x.Email
+            }));
         }
 
         [Route("requests")]
@@ -67,9 +69,9 @@ namespace Backend.Controllers
             return Ok(currentUser.Requests.Select(x =>
             new
             {
-                x.Creator.LastName,
-                x.Creator.FirstName,
-                x.Creator.Email
+                FirstName = x.Creator.LastName,
+                LastName = x.Creator.FirstName,
+                Email = x.Creator.Email
             }).ToList());
         }
 
@@ -78,21 +80,18 @@ namespace Backend.Controllers
         {
             //find currentUser
             ApplicationUser currentUser = (ApplicationUser)userManager.GetUserAsync(this.User).Result;
-            if (currentUser.Id != null)
-                return Ok(currentUser.Friends.Select(x => new
+            return Ok(currentUser.Friends.Select(x => new
+            {
+                FirstName = x.FirstName,
+                LastName = x.LastName,
+                Email = x.Email,
+                Pictures = x.Pictures.Select(y => new
                 {
-                    FirstName = x.FirstName,
-                    LastName = x.LastName,
-                    Email = x.Email,
-                    Pictures = x.Pictures.Select(y => new
-                    {
-                        Likes = y.Likes,
-                        Picture = y.PictureData,
-                        Uid = y.UID
-                    })
-                }));
-            else
-                return BadRequest();
+                    Likes = y.Likes,
+                    Picture = y.PictureData,
+                    Uid = y.UID
+                })
+            }));
         }
 
         [Route("profile")]
@@ -100,15 +99,41 @@ namespace Backend.Controllers
         {
             //find currentUser
             ApplicationUser currentUser = (ApplicationUser)userManager.GetUserAsync(this.User).Result;
-            if (currentUser.Id != null)
-                return Ok(currentUser.Pictures.Select(x => new
-                {
-                    Likes = x.Likes,
-                    Picture = x.PictureData,
-                    Uid = x.UID
-                }));
-            else
-                return BadRequest();
+            return Ok(currentUser.Pictures.Select(x => new
+            {
+                Likes = x.Likes,
+                Picture = x.PictureData,
+                Uid = x.UID
+            }));
+        }
+
+        [Route("people")]
+        public IActionResult NonFriends()
+        {
+            //find currentUser
+            ApplicationUser currentUser = (ApplicationUser)userManager.GetUserAsync(this.User).Result;
+            List<ApplicationUser> nonfriends = this.userRepository.NonFriends(currentUser);
+
+            return Ok(nonfriends.Select(x=> new
+            {
+                FirstName = x.LastName,
+                LastName = x.FirstName,
+                Email = x.Email
+            }).ToList());
+        }
+
+        [Route("people")]
+        public IActionResult NonFriendsFilter(string name)
+        {
+            //find currentUser
+            ApplicationUser currentUser = (ApplicationUser)userManager.GetUserAsync(this.User).Result;
+            List<ApplicationUser> nonfriends = this.userRepository.NonFriends(currentUser);
+            return Ok(nonfriends.Select(x => new
+            {
+                FirstName = x.LastName,
+                LastName = x.FirstName,
+                Email = x.Email
+            }).Where(x=> x.FirstName.Contains(name) || x.LastName.Contains(name)));
         }
 
         [Route("acceptorreject")]
@@ -133,20 +158,12 @@ namespace Backend.Controllers
             return Ok();
         }
 
-        [Route("addpicture")]
-        public IActionResult AddPicture(string picture)
+        [HttpPost]
+        [Route("upload")]
+        public async Task AddPicture(IFormFile file)
         {
-            //find currentUser
-            ApplicationUser currentUser = (ApplicationUser)userManager.GetUserAsync(this.User).Result;
-            if (currentUser.Id != null)
-            {
-                userRepository.AddPicture(picture, currentUser);
-                return Ok();
-            }
-            else
-            {
-                return BadRequest();
-            }
+            var currentUser = await userManager.GetUserAsync(this.User);
+            await this.imageService.SaveImageAsync(file, currentUser);
         }
 
     }

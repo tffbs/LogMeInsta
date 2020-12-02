@@ -1,5 +1,6 @@
 ﻿using Backend.Data;
 using Backend.Model;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Backend.Repositories
 {
-    public class UserRepository
+    public class UserRepository :IUserRepository
     {
         ApplicationDbContext context;
 
@@ -53,17 +54,15 @@ namespace Backend.Repositories
             this.context.SaveChanges();
         }
 
-        public void AddPicture(string picture, ApplicationUser currentUser)
+        public void AddPicture(Picture pic,ApplicationUser currentUser)
         {
-            currentUser.Pictures.Add(new Picture()
-            {
-                UID = Guid.NewGuid().ToString(),
-                User = currentUser,
-                Likes = 0,
-                PictureData = picture
-            });
-
+            currentUser.Pictures.Add(pic);
             this.context.SaveChanges();
+        }
+
+        public List<ApplicationUser> NonFriends(ApplicationUser currentUser)
+        {
+            return this.context.ApplicationUsers.Except(currentUser.Friends).ToList();
         }
     }
 }
