@@ -14,17 +14,18 @@ export class AuthService {
 
 
   public signin(): Observable<any> {
-    let path = this.pathAPI + "auth/signin";
+    let path = this.pathAPI + "signin";
     console.log(path);
     let params = new HttpParams().set("ReturnUrl","https://localhost:44340/profile");
     return this.http.get(path, {params: params });
   }
 
-  public listfriends(): Observable<any> {
-    let path = this.config.setting['PathAPI'] + "user/friends";
+  public logout(): Observable<any>{
+    let path = this.pathAPI + "logout";
     console.log(path);
     return this.http.get(path);
   }
+
 
   private getReturnUrlHeader(){
     let header = new HttpHeaders({ 'ReturnUrl': 'http://localhost:4200/'});

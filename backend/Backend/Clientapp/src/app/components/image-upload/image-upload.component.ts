@@ -12,6 +12,8 @@ export class ImageUploadComponent implements OnInit {
   selectedFileBase64: string;
   loading = false;
   message;
+  file;
+  
 
   constructor(private imageService: ImageService, private toastService: ToastService) { }
 
@@ -20,28 +22,14 @@ export class ImageUploadComponent implements OnInit {
 
 
   onFileChanged(event) {
-    this.getBase64(event.target.files[0]);
+    this.file = event.target.files[0];
   }
 
-  getBase64(file: File) {
-    let reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = function () {
-      //me.modelvalue = reader.result;
-      console.log(reader.result);
-    };
-    reader.onerror = function (error) {
-      console.log('Error: ', error);
-    };  
-    reader.onload = () => {
-      this.selectedFileBase64 = reader.result as string;
-    };
-  }
 
   onUpload() {
-    if (this.selectedFileBase64) {
+    if (this.file) {
       this.loading = true;
-      this.imageService.onUpload(this.selectedFileBase64)
+      this.imageService.onUpload(this.file)
         .subscribe(x => {
           this.loading = false;
           this.toastService.show('The image was successfully uploaded.', { classname: 'bg-success text-light', delay: 2000 });

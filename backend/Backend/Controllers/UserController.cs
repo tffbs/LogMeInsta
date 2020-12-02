@@ -47,6 +47,16 @@ namespace Backend.Controllers
             }
         }
 
+        [Route("removefriend")]
+        public IActionResult RemoveFriend(string email)
+        {
+            //find currentUser
+            ApplicationUser currentUser = (ApplicationUser)userManager.GetUserAsync(this.User).Result;
+
+            userRepository.RemoveFriend(email, currentUser);
+            return Ok();
+        }
+
         [Route("friends")]
         public IActionResult ListFriends()
         {
@@ -57,7 +67,8 @@ namespace Backend.Controllers
             {
                 FirstName = x.FirstName,
                 LastName = x.LastName,
-                Email = x.Email
+                Email = x.Email,
+                ProfilePicture = x.ProfilePic
             }));
         }
 
@@ -71,7 +82,9 @@ namespace Backend.Controllers
             {
                 FirstName = x.Creator.LastName,
                 LastName = x.Creator.FirstName,
-                Email = x.Creator.Email
+                Email = x.Creator.Email,
+                ProfilePicture = x.Creator.ProfilePic,
+                requestId = x.UID
             }).ToList());
         }
 
@@ -107,8 +120,24 @@ namespace Backend.Controllers
             }));
         }
 
+        [Route("userinfo")]
+        public IActionResult UserInfo()
+        {
+            //find currentUser
+            ApplicationUser currentUser = (ApplicationUser)userManager.GetUserAsync(this.User).Result;
+            return Ok(new
+            {
+                FirstName = currentUser.LastName,
+                LastName = currentUser.FirstName,
+                Email = currentUser.Email,
+                ProfilePicture = currentUser.ProfilePic,
+                friends = currentUser.Friends,
+                pictures = currentUser.Pictures
+            });
+        }
+
         [Route("people")]
-        public IActionResult NonFriends()
+        public IActionResult People()
         {
             //find currentUser
             ApplicationUser currentUser = (ApplicationUser)userManager.GetUserAsync(this.User).Result;
@@ -118,12 +147,14 @@ namespace Backend.Controllers
             {
                 FirstName = x.LastName,
                 LastName = x.FirstName,
-                Email = x.Email
+                Email = x.Email,
+                ProfilePicture = x.ProfilePic,
+                isFriend = x.Friends.Any(x => x.Id == currentUser.Id)
             }).ToList());
         }
 
-        [Route("people")]
-        public IActionResult NonFriendsFilter(string name)
+        [Route("people/{name}")]
+        public IActionResult PeopleSearch(string name)
         {
             //find currentUser
             ApplicationUser currentUser = (ApplicationUser)userManager.GetUserAsync(this.User).Result;
@@ -132,7 +163,8 @@ namespace Backend.Controllers
             {
                 FirstName = x.LastName,
                 LastName = x.FirstName,
-                Email = x.Email
+                Email = x.Email,
+
             }).Where(x=> (x.FirstName + x.LastName).ToLower().Contains(name.ToLower())));
         }
 

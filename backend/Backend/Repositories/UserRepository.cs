@@ -36,6 +36,19 @@ namespace Backend.Repositories
             return false;
         }
 
+        public void RemoveFriend(string email, ApplicationUser currentUser)
+        {
+            try
+            {
+                var userToRemove = this.context.ApplicationUsers.Where(x => x.Email == email).FirstOrDefault();
+                currentUser.Friends.Remove(userToRemove);
+            }catch(Exception e)
+            {
+                //log error
+            }
+
+        }
+
         public FriendRequest GetUserRequest(string requestId)
         {
             return this.context.Requests.Where(x => x.UID == requestId).FirstOrDefault();

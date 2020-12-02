@@ -1,43 +1,21 @@
-import { PhotoCard } from './../models/photo';
 import { AppConfig } from './../config/config';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { EventEmitter, Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders} from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { Injectable } from '@angular/core';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ImageService {
 
-  private pathAPI = this.config.setting['PathAPI'] + 'categories/';
-
-  private cardDetails: Array<PhotoCard> = new Array<PhotoCard>();
-
-  public cardDetailsEventEmitter: EventEmitter<Array<PhotoCard>> = new EventEmitter();
+  private pathAPI = this.config.setting['PathAPI'] + 'user/';
 
   constructor(private http: HttpClient, private config: AppConfig) { }
 
-  public onUpload(file): Observable<any> {
-    let card = new PhotoCard(file, "DevUser");
-    this.cardDetails.push(card);
-    this.cardDetailsEventEmitter.next(this.cardDetails);
-    return this.getMockObservable();
-  }
-
-  public getCardDetails() {
-    return this.cardDetails;
-  }
-
-  private delay(ms: number) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-  }
-
-  private getMockObservable() {
-    return Observable.create(obs => {
-      setTimeout(() => {
-        obs.next([1, 2, 3]);
-        obs.complete();
-      }, 500);
-    });
+  public onUpload(fileToUpload): Observable<any> {
+    let path = this.pathAPI + "upload";
+    const formData = new FormData();
+    formData.append('file', fileToUpload, fileToUpload.name);
+    return this.http.post(path, formData, {reportProgress: true, observe: 'events'})
   }
 }

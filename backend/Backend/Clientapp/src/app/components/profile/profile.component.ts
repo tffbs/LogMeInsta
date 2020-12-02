@@ -1,3 +1,7 @@
+import { User } from './../../model/user.model';
+import { UserService } from './../../services/user.service';
+import { Request } from './../../model/request.model';
+import { FriendsService } from './../../services/friends.service';
 import { PHOTOS } from './../../models/photo';
 import { Component, OnInit } from '@angular/core';
 import { PhotoCard } from 'src/app/models/photo';
@@ -8,20 +12,30 @@ import { PhotoCard } from 'src/app/models/photo';
   styleUrls: ['./profile.component.css']
 })
 export class ProfileComponent implements OnInit {
-
-  profileUserName: string;
-  numberOfUploads: number;
-  numberOfFriends: number;
-
-
+  user: User;
   photos = PHOTOS;
+  requests: Request[] = [];
 
-  constructor() { }
+
+  constructor(private friendsService: FriendsService, private userService: UserService) { }
 
   ngOnInit(): void {
-    this.profileUserName = "DevUser";
-    this.numberOfFriends = 0;
-    this.numberOfUploads = this.photos.length;
+    this.getRequests();
+    this.getUserInfo();
   }
 
+  
+  getRequests(){
+    this.friendsService.getRequests().subscribe(x => {
+      this.requests = x
+    },
+    (error) => console.log(error));
+  }
+
+  getUserInfo(){
+    this.userService.getInfo().subscribe(x => {
+      this.user = x
+      console.log(this.user)
+    })
+  }
 }
