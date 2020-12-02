@@ -112,9 +112,9 @@ namespace Backend.Controllers
         {
             //find currentUser
             ApplicationUser currentUser = (ApplicationUser)userManager.GetUserAsync(this.User).Result;
-            List<ApplicationUser> nonfriends = this.userRepository.NonFriends(currentUser);
+            List<ApplicationUser> users = this.userRepository.GetUsers(currentUser);
 
-            return Ok(nonfriends.Select(x=> new
+            return Ok(users.Select(x=> new
             {
                 FirstName = x.LastName,
                 LastName = x.FirstName,
@@ -127,13 +127,13 @@ namespace Backend.Controllers
         {
             //find currentUser
             ApplicationUser currentUser = (ApplicationUser)userManager.GetUserAsync(this.User).Result;
-            List<ApplicationUser> nonfriends = this.userRepository.NonFriends(currentUser);
-            return Ok(nonfriends.Select(x => new
+            List<ApplicationUser> users = this.userRepository.GetUsers(currentUser);
+            return Ok(users.Select(x => new
             {
                 FirstName = x.LastName,
                 LastName = x.FirstName,
                 Email = x.Email
-            }).Where(x=> x.FirstName.Contains(name) || x.LastName.Contains(name)));
+            }).Where(x=> (x.FirstName + x.LastName).ToLower().Contains(name.ToLower())));
         }
 
         [Route("acceptorreject")]
