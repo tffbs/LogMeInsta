@@ -59,5 +59,10 @@ namespace Backend.Repositories
             currentUser.Pictures.Add(pic);
             this.context.SaveChanges();
         }
+
+        public List<ApplicationUser> NonFriends(ApplicationUser currentUser)
+        {
+            return this.context.ApplicationUsers.Except(currentUser.Friends).ToList();
+        }
     }
 }
