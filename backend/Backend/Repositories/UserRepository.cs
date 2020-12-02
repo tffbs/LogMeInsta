@@ -60,9 +60,9 @@ namespace Backend.Repositories
             this.context.SaveChanges();
         }
 
-        public List<ApplicationUser> NonFriends(ApplicationUser currentUser)
+        public List<ApplicationUser> GetUsers(ApplicationUser currentUser)
         {
-            return this.context.ApplicationUsers.Except(currentUser.Friends).ToList();
+            return this.context.ApplicationUsers.Where(x => x.Id != currentUser.Id).ToList();
         }
     }
 }
