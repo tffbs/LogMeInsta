@@ -197,10 +197,19 @@ namespace Backend.Controllers
 
         [HttpPost]
         [Route("upload")]
-        public async Task AddPicture(IFormFile file)
+        public async Task<IActionResult> AddPicture(IFormFile file)
         {
-            var currentUser = await userManager.GetUserAsync(this.User);
-            await this.imageService.SaveImageAsync(file, currentUser);
+            try
+            {
+                var currentUser = await userManager.GetUserAsync(this.User);
+                await this.imageService.SaveImageAsync(file, currentUser);
+                return Ok();
+            }
+            catch (UnauthorizedAccessException e)
+            {
+                return BadRequest();
+            }
+
         }
 
     }

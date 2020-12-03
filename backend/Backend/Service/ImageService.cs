@@ -45,6 +45,10 @@ namespace Backend.Service
                 };
                 userRepo.AddPicture(newPic, (ApplicationUser)currentUser);
             }
+            else
+            {
+                throw new BadImageFormatException();
+            }
         }
     }
 }
