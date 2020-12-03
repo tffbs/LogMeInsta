@@ -21,15 +21,13 @@ namespace Backend.Repositories
 
         public bool AddFriendRequest(string email, ApplicationUser currentUser)
         {
-            ApplicationUser friend = this.context.ApplicationUsers.Where(x => x.Email == "almasipatrik3@gmail.com").FirstOrDefault();
-            ApplicationUser currentUserv2 = this.context.ApplicationUsers.Where(x => x.Email == "almasipatrik@gmail.com").FirstOrDefault();
-            currentUserv2.FirstName = "TESZT";
+            ApplicationUser friend = this.context.ApplicationUsers.Where(x => x.Email == email).FirstOrDefault();;
             if (friend.Id != null)
             {
                 //Add the request in his/her friend request list.
                 FriendRequest newRequest = new FriendRequest()
                 {
-                    Creator = currentUserv2.Email,
+                    Creator = currentUser.Email,
                     Time = DateTime.Now,
                     UID = Guid.NewGuid().ToString()
                 };
