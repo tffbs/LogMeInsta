@@ -169,7 +169,7 @@ namespace Backend.Migrations
                 columns: table => new
                 {
                     UID = table.Column<string>(nullable: false),
-                    PictureData = table.Column<string>(nullable: true),
+                    PictureData = table.Column<byte[]>(nullable: true),
                     Likes = table.Column<int>(nullable: false),
                     UserId = table.Column<string>(nullable: true)
                 },

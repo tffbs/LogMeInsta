@@ -45,8 +45,8 @@ namespace Backend.Migrations
                     b.Property<int>("Likes")
                         .HasColumnType("int");
 
-                    b.Property<string>("PictureData")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<byte[]>("PictureData")
+                        .HasColumnType("varbinary(max)");
 
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
