@@ -10,7 +10,7 @@ namespace Backend.Model
     {
         [Key]
         public string UID { get; set; }
-        public virtual ApplicationUser Creator { get; set; }
+        public string Creator { get; set; }
         public DateTime Time { get; set; }
     }
 }

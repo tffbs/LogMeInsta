@@ -1,6 +1,7 @@
 ﻿using Backend.Data;
 using Backend.Model;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,20 +21,37 @@ namespace Backend.Repositories
 
         public bool AddFriendRequest(string email, ApplicationUser currentUser)
         {
-            ApplicationUser friend = this.context.ApplicationUsers.Where(x => x.Email == email).FirstOrDefault();
+            ApplicationUser friend = this.context.ApplicationUsers.Where(x => x.Email == email).FirstOrDefault();;
             if (friend.Id != null)
             {
                 //Add the request in his/her friend request list.
-                friend.Requests.Add(new FriendRequest()
+                FriendRequest newRequest = new FriendRequest()
                 {
-                    Creator = currentUser,
+                    Creator = currentUser.Email,
                     Time = DateTime.Now,
                     UID = Guid.NewGuid().ToString()
-                });
+                };
+
+                friend.Requests.Add(newRequest);
+
                 this.context.SaveChanges();
+
                 return true;
             }
             return false;
+        }
+
+        public void RemoveFriend(string email, ApplicationUser currentUser)
+        {
+            try
+            {
+                var userToRemove = this.context.ApplicationUsers.Where(x => x.Email == email).FirstOrDefault();
+                currentUser.Friends.Remove(userToRemove);
+            }catch(Exception e)
+            {
+                //log error
+            }
+
         }
 
         public FriendRequest GetUserRequest(string requestId)
@@ -43,7 +61,8 @@ namespace Backend.Repositories
 
         public void AddFriend(ApplicationUser currentUser, FriendRequest fr)
         {
-            currentUser.Friends.Add(fr.Creator);
+            ApplicationUser temp = this.GetUserByEmail(fr.Creator);
+            currentUser.Friends.Add(temp);
 
             this.context.SaveChanges();
         }
@@ -63,6 +82,11 @@ namespace Backend.Repositories
         public List<ApplicationUser> GetUsers(ApplicationUser currentUser)
         {
             return this.context.ApplicationUsers.Where(x => x.Id != currentUser.Id).ToList();
+        }
+
+        public ApplicationUser GetUserByEmail(string email)
+        {
+            return this.context.ApplicationUsers.Where(x => x.Email == email).FirstOrDefault();
         }
     }
 }

@@ -1,14 +1,24 @@
 
 
+<div *ngIf="user" class="container centered">
+    <h2>{{user.firstName + " " + user.lastName}}</h2>
+    <h4>Friends: {{user.friends.length}}</h4>
+    <h4>Uploads: {{0}}</h4>
+</div>
+
+<div *ngIf="this.requests.length > 0" class="container centered">
+    <p>You have new request(s)</p>
+    <div *ngFor="let request of requests" class="card">
+        <h4>Name: {{request.firstName + " " + request.lastName}}</h4>
+        <button (click)="acceptRequest(request.requestId)" class="btn btn-success">Accept</button>
+        <button (click)="declineRequest(request.requestId)" class="btn btn-danger">Decline</button>
+    </div>
+</div>
+
 <div class="container centered">
-    <h2>{{profileUserName}}</h2>
-    <h4>Friends: {{numberOfFriends}}</h4>
-    <h4>Uploads: {{numberOfUploads}}</h4>
-
     <h3>My Images</h3>
+    <div class = "container card" *ngFor="let detail of photos">
+        <app-photocard [image]="detail.image" [userName]="detail.username"></app-photocard>
+    </div>
 </div>
 
-
-<div class = "container card" *ngFor="let detail of photos">
-    <app-photocard [image]="detail.image" [userName]="detail.username"></app-photocard>
-</div>

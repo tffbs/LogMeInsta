@@ -169,7 +169,7 @@ namespace Backend.Migrations
                 columns: table => new
                 {
                     UID = table.Column<string>(nullable: false),
-                    PictureData = table.Column<string>(nullable: true),
+                    PictureData = table.Column<byte[]>(nullable: true),
                     Likes = table.Column<int>(nullable: false),
                     UserId = table.Column<string>(nullable: true)
                 },
@@ -189,15 +189,16 @@ namespace Backend.Migrations
                 columns: table => new
                 {
                     UID = table.Column<string>(nullable: false),
-                    CreatorId = table.Column<string>(nullable: true),
-                    Time = table.Column<DateTime>(nullable: false)
+                    Creator = table.Column<string>(nullable: true),
+                    Time = table.Column<DateTime>(nullable: false),
+                    ApplicationUserId = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Requests", x => x.UID);
                     table.ForeignKey(
-                        name: "FK_Requests_AspNetUsers_CreatorId",
-                        column: x => x.CreatorId,
+                        name: "FK_Requests_AspNetUsers_ApplicationUserId",
+                        column: x => x.ApplicationUserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -253,9 +254,9 @@ namespace Backend.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Requests_CreatorId",
+                name: "IX_Requests_ApplicationUserId",
                 table: "Requests",
-                column: "CreatorId");
+                column: "ApplicationUserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

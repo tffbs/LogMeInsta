@@ -1,5 +1,7 @@
+import { Subscription } from 'rxjs';
+import { User } from './../../model/user.model';
+import { FriendsService } from './../../services/friends.service';
 import { AuthService } from './../../services/auth.service';
-import { SearchService } from './../../services/search.service';
 import { Component, OnInit } from '@angular/core';
 import { ToastService } from './../../services/toast.service';
 
@@ -10,59 +12,52 @@ export class AppModule {}
   styleUrls: ['./users.component.css'],
 })
 export class UsersComponent implements OnInit {
-  constructor(private toastService: ToastService, private searchService: SearchService, private authService: AuthService) {}
+  
   title = 'Search Users';
   searchText;
-  users = [
-    {
-      id: 11,
-      name: 'Ivett',
-      isFriend: 'assets/img//remove.png',
-      profilePicture: 'assets/img/profile_pictures/ivett.png',
-    },
-    {
-      id: 12,
-      name: 'Csaba',
-      isFriend: 'assets/img//add.png',
-      profilePicture: 'assets/img/profile_pictures/sanyi.png',
-    },
-    {
-      id: 13,
-      name: 'Jani',
-      isFriend: 'assets/img//add.png',
-      profilePicture: 'assets/img/profile_pictures/jani.png',
-    },
-    {
-      id: 14,
-      name: 'Kati',
-      isFriend: 'assets/img//remove.png',
-      profilePicture: 'assets/img/profile_pictures/kati.png',
-    },
-  ];
-  ngOnInit(): void {}
+  users: User[] = [];
+
+  constructor(private toastService: ToastService, private authService: AuthService, private friendsService: FriendsService) {}
+  
+  ngOnInit(): void {
+    this.getFriends()
+    this.friendsService.getUsers().subscribe(x => {
+      (x != null && x.length > 0) ? this.users = x : console.log("no users found")
+      console.log(this.users)
+    }
+      );
+  }
 
   changeUserStatus(user) {
     console.log('changing friend status');
-    if (
-      this.users.find((x) => x.id == user).isFriend === 'assets/img//remove.png'
-    ) {
-      // this.toastService.show('Friend removed.', {
-      //   classname: 'bg-danger text-light',
-      //   delay: 2000,
-      // });
-      this.users.find((x) => x.id == user).isFriend = 'assets/img//add.png';
-    } else {
-      // this.toastService.show('Friend added.', {
-      //   classname: 'bg-success text-light',
-      //   delay: 2000,
-      // });
-      this.users.find((x) => x.id == user).isFriend = 'assets/img//remove.png';
+    if(user.isFriend){
+      this.friendsService.removeFriend(user.email).subscribe(x => console.log(x));
+      this.toastService.show('Friend removed.', {
+        classname: 'bg-danger text-light',
+        delay: 2000,
+      });
+    }else{
+      this.friendsService.addFriend(user.email).subscribe(x => console.log(x));
+      this.toastService.show('Friend request sent.', {
+        classname: 'bg-success text-light',
+        delay: 2000,
+      });
     }
-    // FB.login();
+    user.isFriend = !user.isFriend;
   }
 
   getFriends(){
-    this.authService.listfriends().subscribe(
+    this.friendsService.getfriends().subscribe(
+      x => console.log(x),
+      (error) => {
+        console.log(error);
+        window.location.href = error.url
+      } 
+      );
+  }
+
+  getUsers(){
+    this.friendsService.getUsers().subscribe(
       x => console.log(x),
       (error) => window.location.href = error.url
       );

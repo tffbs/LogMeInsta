@@ -1,5 +1,6 @@
+import { FriendsService } from './../../services/friends.service';
+import { AuthService } from './../../services/auth.service';
 import { Helpers } from './../../helpers/helpers';
-import { SearchService } from './../../services/search.service';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
@@ -13,7 +14,7 @@ export class HeadComponent implements OnInit {
   searchForm: FormGroup;
   submitted;
 
-  constructor(private formBuilder: FormBuilder, private searchService: SearchService, private helpers: Helpers) { }
+  constructor(private formBuilder: FormBuilder, private friendsService: FriendsService, private helpers: Helpers, private authservice: AuthService) { }
 
   ngOnInit(): void {
     this.initForm();
@@ -35,13 +36,13 @@ export class HeadComponent implements OnInit {
       return;
   }
   this.submitted = true;
-    this.searchService.search(value);
+    this.friendsService.search(value);
   }
 
   get f() { return this.searchForm.controls; }
 
   logout(){
-    this.helpers.logout()
+    this.authservice.logout().subscribe(x => console.log(x));
   }
 
 }

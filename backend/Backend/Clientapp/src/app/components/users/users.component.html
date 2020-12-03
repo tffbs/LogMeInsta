@@ -24,14 +24,14 @@
       <tbody>
         <tr *ngFor="let user of users | filter: searchText">
           <td style="width: 10%"><img src="{{ user.profilePicture }}" /></td>
-          <td style="width: 80%">{{ user.name }}</td>
+          <td style="width: 80%">{{ user.firstName + " " + user.lastName }}</td>
           <td>
             <button
               class="btn"
               type="submit"
-              (click)="changeUserStatus(user.id)"
+              (click)="changeUserStatus(user)"
             >
-              <img class="img-friend" src="{{ user.isFriend }}" />
+              <img class="img-friend" src='{{  user.isFriend ?  "assets/img//remove.png" : "assets/img//add.png"}}' />
             </button>
           </td>
         </tr>
