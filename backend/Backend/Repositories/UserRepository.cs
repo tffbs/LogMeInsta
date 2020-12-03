@@ -22,7 +22,7 @@ namespace Backend.Repositories
         public bool AddFriendRequest(string email, ApplicationUser currentUser)
         {
             ApplicationUser friend = this.context.ApplicationUsers.Where(x => x.Email == email).FirstOrDefault();;
-            if (friend.Id != null)
+            if (friend.Id != null && !friend.Requests.Any(x => x.Creator == currentUser.Email))
             {
                 //Add the request in his/her friend request list.
                 FriendRequest newRequest = new FriendRequest()
