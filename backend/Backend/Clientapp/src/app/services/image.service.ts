@@ -16,6 +16,7 @@ export class ImageService {
     let path = this.pathAPI + "upload";
     const formData = new FormData();
     formData.append('file', fileToUpload, fileToUpload.name);
+    console.log(path)
     return this.http.post(path, formData, {reportProgress: true, observe: 'events'})
   }
 }
