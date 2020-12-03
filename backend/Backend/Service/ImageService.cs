@@ -21,13 +21,13 @@ namespace Backend.Service
             this.userRepo = userRepo;
         }
 
-        public bool SaveImageAsync(IFormFile file, IdentityUser currentUser)
+        public async Task SaveImageAsync(IFormFile file, IdentityUser currentUser)
         {
             var bytes = new byte[file.Length];
             bool plane = false;
             using (var stream = file.OpenReadStream())
             {
-                stream.ReadAsync(bytes, 0, bytes.Length);
+                await stream.ReadAsync(bytes, 0, bytes.Length);
                 stream.Seek(0, System.IO.SeekOrigin.Begin);
                 var tags = this.visionClient.TagImageInStreamAsync(stream).Result;
                 if (tags.Tags.Any(x => x.Name.Contains("airplane")))
@@ -44,9 +44,11 @@ namespace Backend.Service
                     UserId = currentUser.Id
                 };
                 userRepo.AddPicture(newPic, (ApplicationUser)currentUser);
-                return true;
             }
-            return false;
+            else
+            {
+                throw new BadImageFormatException();
+            }
         }
     }
 }

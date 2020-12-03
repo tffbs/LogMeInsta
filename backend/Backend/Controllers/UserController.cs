@@ -15,7 +15,7 @@ using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 namespace Backend.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [Route("[controller]")]
     [ApiController]
     public class UserController : ControllerBase
@@ -190,14 +190,19 @@ namespace Backend.Controllers
 
         [HttpPost]
         [Route("upload")]
-        public IActionResult AddPicture(IFormFile file)
+        public async Task<IActionResult> AddPicture(IFormFile file)
         {
-            var currentUser = userManager.GetUserAsync(this.User).Result;
-            if (this.imageService.SaveImageAsync(file, currentUser)){
+            try
+            {
+                var currentUser = await userManager.GetUserAsync(this.User);
+                await this.imageService.SaveImageAsync(file, currentUser);
                 return Ok();
             }
-            else
-                return Unauthorized();
+            catch (UnauthorizedAccessException e)
+            {
+                return BadRequest();
+            }
+
         }
 
     }

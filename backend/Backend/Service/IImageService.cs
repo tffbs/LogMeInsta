@@ -10,6 +10,6 @@ namespace Backend.Service
 {
     public interface IImageService
     {
-       bool SaveImageAsync(IFormFile file, IdentityUser currentUser);
+       Task SaveImageAsync(IFormFile file, IdentityUser currentUser);
     }
 }
