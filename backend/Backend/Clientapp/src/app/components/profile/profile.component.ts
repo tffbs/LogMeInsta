@@ -38,7 +38,9 @@ export class ProfileComponent implements OnInit {
     this.userService.getInfo().subscribe(x => {
       this.user = x
       console.log(this.user)
-    })
+    },
+    (error) => window.location.href = error.url
+    )
   }
 
   acceptRequest(requestId: string){
