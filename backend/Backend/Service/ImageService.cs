@@ -24,21 +24,27 @@ namespace Backend.Service
         public async Task SaveImageAsync(IFormFile file, IdentityUser currentUser)
         {
             var bytes = new byte[file.Length];
+            bool plane = false;
             using (var stream = file.OpenReadStream())
             {
                 await stream.ReadAsync(bytes, 0, bytes.Length);
                 stream.Seek(0, System.IO.SeekOrigin.Begin);
-                var tags = await this.visionClient.TagImageInStreamAsync(stream);
+                var tags = this.visionClient.TagImageInStreamAsync(stream).Result;
+                if (tags.Tags.Any(x => x.Name.Contains("airplane")))
+                    plane = true;
             }
-            Picture newPic = new Picture()
+            if (!plane)
             {
-                UID = Guid.NewGuid().ToString(),
-                Likes = 0,
-                PictureData = bytes,
-                User = (ApplicationUser)currentUser,
-                UserId = currentUser.Id
-            };
-            userRepo.AddPicture(newPic, (ApplicationUser)currentUser);
+                Picture newPic = new Picture()
+                {
+                    UID = Guid.NewGuid().ToString(),
+                    Likes = 0,
+                    PictureData = bytes,
+                    User = (ApplicationUser)currentUser,
+                    UserId = currentUser.Id
+                };
+                userRepo.AddPicture(newPic, (ApplicationUser)currentUser);
+            }
         }
     }
 }

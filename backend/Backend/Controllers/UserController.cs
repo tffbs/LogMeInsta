@@ -80,12 +80,12 @@ namespace Backend.Controllers
             return Ok(currentUser.Requests.Select(x =>
             new
             {
-                FirstName = x.Creator.LastName,
-                LastName = x.Creator.FirstName,
-                Email = x.Creator.Email,
-                ProfilePicture = x.Creator.ProfilePic,
+                FirstName = this.userRepository.GetUserByEmail(x.Creator).FirstName,
+                LastName = this.userRepository.GetUserByEmail(x.Creator).LastName,
+                Email = x.Creator,
+                ProfilePicture = this.userRepository.GetUserByEmail(x.Creator).ProfilePic,
                 requestId = x.UID
-            }).ToList());
+            }).ToList()) ;
         }
 
         [Route("feed")]

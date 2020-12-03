@@ -24,15 +24,18 @@ namespace Backend.Migrations
                     b.Property<string>("UID")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("CreatorId")
+                    b.Property<string>("ApplicationUserId")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Creator")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("Time")
                         .HasColumnType("datetime2");
 
                     b.HasKey("UID");
 
-                    b.HasIndex("CreatorId");
+                    b.HasIndex("ApplicationUserId");
 
                     b.ToTable("Requests");
                 });
@@ -45,8 +48,8 @@ namespace Backend.Migrations
                     b.Property<int>("Likes")
                         .HasColumnType("int");
 
-                    b.Property<string>("PictureData")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<byte[]>("PictureData")
+                        .HasColumnType("varbinary(max)");
 
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
@@ -287,9 +290,9 @@ namespace Backend.Migrations
 
             modelBuilder.Entity("Backend.Model.FriendRequest", b =>
                 {
-                    b.HasOne("Backend.Model.ApplicationUser", "Creator")
+                    b.HasOne("Backend.Model.ApplicationUser", null)
                         .WithMany("Requests")
-                        .HasForeignKey("CreatorId");
+                        .HasForeignKey("ApplicationUserId");
                 });
 
             modelBuilder.Entity("Backend.Model.Picture", b =>
