@@ -62,7 +62,6 @@ namespace Backend.Controllers
         {
             //find currentUser
             ApplicationUser currentUser = (ApplicationUser)userManager.GetUserAsync(this.User).Result;
-            currentUser.Friends.Add(new ApplicationUser() { Id = Guid.NewGuid().ToString(), FirstName = "TESZT", LastName = "ADAT", Email = "teszt@adat.com" });
             return Ok(currentUser.Friends.Select(x => new
             {
                 FirstName = x.FirstName,
@@ -93,18 +92,18 @@ namespace Backend.Controllers
         {
             //find currentUser
             ApplicationUser currentUser = (ApplicationUser)userManager.GetUserAsync(this.User).Result;
-            return Ok(currentUser.Friends.Select(x => new
-            {
-                FirstName = x.FirstName,
-                LastName = x.LastName,
-                Email = x.Email,
-                Pictures = x.Pictures.Select(y => new
+                return Ok(currentUser.Friends.Select(x => new
                 {
-                    Likes = y.Likes,
-                    Picture = y.PictureData,
-                    Uid = y.UID
-                })
-            }));
+                    FirstName = x.FirstName,
+                    LastName = x.LastName,
+                    Email = x.Email,
+                    Pictures = x.Pictures.Select(y => new
+                    {
+                        Likes = y.Likes,
+                        Picture = y.PictureData,
+                        Uid = y.UID
+                    })
+                }));
         }
 
         [Route("profile")]
@@ -132,12 +131,6 @@ namespace Backend.Controllers
                 Email = currentUser.Email,
                 ProfilePicture = currentUser.ProfilePic,
                 friends = currentUser.Friends,
-                //Pictures = currentUser.Pictures.Select(y => new
-                //{
-                //    Likes = y.Likes,
-                //    Picture = y.PictureData,
-                //    Uid = y.UID
-                //})
             });
         }
 
