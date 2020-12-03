@@ -190,10 +190,14 @@ namespace Backend.Controllers
 
         [HttpPost]
         [Route("upload")]
-        public async Task AddPicture(IFormFile file)
+        public IActionResult AddPicture(IFormFile file)
         {
-            var currentUser = await userManager.GetUserAsync(this.User);
-            await this.imageService.SaveImageAsync(file, currentUser);
+            var currentUser = userManager.GetUserAsync(this.User).Result;
+            if (this.imageService.SaveImageAsync(file, currentUser)){
+                return Ok();
+            }
+            else
+                return Unauthorized();
         }
 
     }
