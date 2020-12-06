@@ -49,7 +49,7 @@ namespace Backend
             services.AddControllers();
             services.AddDbContext<ApplicationDbContext>(opt =>
             {
-                string connection = "Server = (localdb)\\mssqllocaldb; Database = InstaDB; Trusted_Connection = True; MultipleActiveResultSets = true";
+                var connection = Configuration.GetValue<string>("ConnectionString");
 
                 opt.UseLazyLoadingProxies();
                 opt.UseSqlServer(connection);
@@ -87,6 +87,7 @@ namespace Backend
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IImageService, ImageService>();
             services.AddSingleton(s => new ComputerVisionClient(new ApiKeyServiceClientCredentials(Configuration["AzureCognitiveRecog:Vision:Key"])) { Endpoint = Configuration["AzureCognitiveRecog:Vision:Endpoint"] });
+            services.BuildServiceProvider().GetService<ApplicationDbContext>().Database.Migrate();
 
         }
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -112,12 +113,12 @@ namespace Backend
 
 
 
-            app.UseStaticFiles(new StaticFileOptions
-            {
-                FileProvider = new PhysicalFileProvider(
-                    Path.Combine(Directory.GetCurrentDirectory(), "Content")),
-                RequestPath = "/Content"
-            });
+            //app.UseStaticFiles(new StaticFileOptions
+            //{
+            //    FileProvider = new PhysicalFileProvider(
+            //        Path.Combine(Directory.GetCurrentDirectory(), "Content")),
+            //    RequestPath = "/Content"
+            //});
 
             app.UseSpa(spa =>
             {
