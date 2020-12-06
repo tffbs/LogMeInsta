@@ -81,7 +81,7 @@ namespace Backend
                     });
             services.AddSpaStaticFiles(configuration =>
             {
-                configuration.RootPath = "ClientApp/dist";
+                configuration.RootPath = "ClientApp";
             });
 
             services.AddScoped<IUserRepository, UserRepository>();
