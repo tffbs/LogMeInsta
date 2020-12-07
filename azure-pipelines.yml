@@ -48,4 +48,4 @@ steps:
 
 
 - download: current
-  artifact: WebApp
+  patterns: '**/*.zip'
