@@ -47,5 +47,15 @@ steps:
     configuration: '$(buildConfiguration)'
 
 
-- download: current
-  patterns: '**/*.zip'
+- task: CopyFiles@2
+  displayName: 'Copy files to Artifacts'
+  inputs:
+    SourceFolder: '$(build.artifactStagingDirectory)'
+    Contents: '**'
+    TargetFolder: '$(build.artifactstagingdirectory)'
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'
