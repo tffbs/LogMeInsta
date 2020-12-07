@@ -47,3 +47,5 @@ steps:
     configuration: '$(buildConfiguration)'
 
 
+- download: current
+  artifact: WebApp
