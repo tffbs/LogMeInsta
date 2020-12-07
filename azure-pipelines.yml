@@ -16,18 +16,28 @@ variables:
 
 steps:
 - task: NuGetToolInstaller@1
+
+- task: NuGetCommand@2
+  inputs:
+    restoreSolution: '$(solution)'
+
 - task: NodeTool@0
   inputs:
     versionSpec: '10.x'
   displayName: 'Install Node.js'
 
 - task: Npm@1
+  displayName: 'Restore Angular Dependencies'
   inputs:
       workingDir: 'backend/Backend/Clientapp'
 
-- task: NuGetCommand@2
+- task: Npm@1
+  displayName: 'Build Angular'
   inputs:
-    restoreSolution: '$(solution)'
+    command: custom
+    workingDir: 'backend/Backend/Clientapp'
+    verbose: false
+    customCommand: 'run build'
 
 - task: VSBuild@1
   inputs:
@@ -36,7 +46,4 @@ steps:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
 
-- task: VSTest@2
-  inputs:
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
+
