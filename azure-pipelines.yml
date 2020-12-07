@@ -1,36 +1,61 @@
-pool:
-  vmImage: 'ubuntu-latest'
-
+# ASP.NET Core (.NET Framework)
+# Build and test ASP.NET Core projects targeting the full .NET Framework.
+# Add steps that publish symbols, save build artifacts, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
 trigger:
-- master
+- main
 
+pool:
+  vmImage: 'windows-latest'
+  
 variables:
-  buildConfiguration: 'release'
+  solution: '**/*.sln'
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
 
 steps:
-- task: DotNetCoreCLI@2
-  displayName: dotnet build $(buildConfiguration)
+- task: NuGetToolInstaller@1
+
+- task: NuGetCommand@2
   inputs:
-    command: build
-    arguments: '--configuration $(buildConfiguration)' # Update this to match your need
+    restoreSolution: '$(solution)'
+
+
+# - task: NodeTool@0
+#   inputs:
+#     versionSpec: '10.x'
+#   displayName: 'Install Node.js'
 
 - task: Npm@1
-  displayName: "npm install"
+  displayName: 'Restore Angular Dependencies'
   inputs:
-    command: 'install'
-    workingDir: 'ClientApp'
-
+      workingDir: 'backend/Backend/Clientapp'
+    
 - task: Npm@1
-  displayName: "npm run build:$(buildConfiguration)"
+  displayName: 'Build Angular'
   inputs:
-    command: 'custom'
-    workingDir: 'ClientApp'
-    customCommand: 'run build:$(buildConfiguration)'
+    command: custom
+    workingDir: 'backend/Backend/Clientapp'
+    verbose: false
+    customCommand: 'run build'
+  
+- task: VSBuild@1
+  inputs:
+    solution: '$(solution)'
+    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:DesktopBuildPackageLocation="$(build.artifactStagingDirectory)\WebApp.zip" /p:DeployIisAppPath="Default Web Site"'
+    platform: '$(buildPlatform)'
+    configuration: '$(buildConfiguration)'
 
-- task: DotNetCoreCLI@2
-  displayName: "dotnet publish $(buildConfiguration)"
+
+- task: CopyFiles@2
+  displayName: 'Copy files to Artifacts'
   inputs:
-    command: 'publish'
-    publishWebProjects: True
-    arguments: '-c $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
-    zipAfterPublish: True
+    SourceFolder: '$(build.artifactStagingDirectory)'
+    Contents: '**'
+    TargetFolder: '$(build.artifactstagingdirectory)'
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'drop'
+    publishLocation: 'Container' 
