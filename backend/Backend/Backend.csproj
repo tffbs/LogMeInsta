@@ -38,6 +38,5 @@
 
   <ItemGroup>
     <Folder Include="Clientapp\" />
-    <Folder Include="Migrations\" />
   </ItemGroup>
 </Project>
