@@ -34,11 +34,13 @@ namespace Backend.Controllers
         }
 
 
-        [HttpGet]
-        public ActionResult<IEnumerable<Message>> GetAll(string receiver)
+        [HttpPost]
+        [Route("getall")]
+        public ActionResult<IEnumerable<Message>> GetAll([FromBody] Message value)
+        
         {
             ApplicationUser currentUser = (ApplicationUser)userManager.GetUserAsync(this.User).Result;
-            return this.context.Messages.Where( x => (x.Sender == currentUser.Email && x.Receiver == receiver) ||  (x.Sender == receiver && x.Receiver == currentUser.Email) ).OrderBy(x => x.Date).ToList();
+            return this.context.Messages.Where( x => (x.Sender == currentUser.Email && x.Receiver == value.Receiver) ||  (x.Sender == value.Receiver && x.Receiver == currentUser.Email) ).OrderBy(x => x.Date).ToList();
         }
 
         [HttpGet("{id}")]
