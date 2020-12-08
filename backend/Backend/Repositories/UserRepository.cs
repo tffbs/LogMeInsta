@@ -88,5 +88,24 @@ namespace Backend.Repositories
         {
             return this.context.ApplicationUsers.Where(x => x.Email == email).FirstOrDefault();
         }
+
+        public Picture GetPictureByUID(string uid)
+        {
+            return this.context.Pictures.Where(x => x.UID == uid).FirstOrDefault();
+        }
+
+        public void AddLike(Picture pic, ApplicationUser currentUser)
+        {
+            pic.Persons.Add(currentUser);
+            pic.Likes = pic.Persons.Count;
+            this.context.SaveChanges();
+        }
+
+        public void DeleteLike(Picture pic, ApplicationUser currentUser)
+        {
+            pic.Persons.Remove(currentUser);
+            pic.Likes = pic.Persons.Count;
+            this.context.SaveChanges();
+        }
     }
 }

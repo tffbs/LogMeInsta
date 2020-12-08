@@ -21,5 +21,6 @@ namespace Backend.Model
         public string UserId { get; set; }
         
         public virtual ApplicationUser User { get; set; }
+        public ICollection<ApplicationUser> Persons { get; set; }
     }
 }

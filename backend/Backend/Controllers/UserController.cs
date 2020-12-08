@@ -47,6 +47,20 @@ namespace Backend.Controllers
             }
         }
 
+        [Route("like")]
+        public IActionResult Like(string uid)
+        {
+            //find currentUser
+            ApplicationUser currentUser = (ApplicationUser)userManager.GetUserAsync(this.User).Result;
+            Picture pic = this.userRepository.GetPictureByUID(uid);
+            if (pic.Persons.Any(x => x.Email == currentUser.Email))
+                this.userRepository.AddLike(pic,currentUser);
+            else
+                this.userRepository.DeleteLike(pic,currentUser);
+
+            return Ok();
+        }
+
         [Route("removefriend")]
         public IActionResult RemoveFriend(string email)
         {
