@@ -1,20 +1,60 @@
-# ASP.NET Core
-# Build and test ASP.NET Core projects targeting .NET Core.
-# Add steps that run tests, create a NuGet package, deploy, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
-
 trigger:
-- main
+  - main
 
 pool:
-  vmImage: 'ubuntu-latest'
+  vmImage: 'windows-latest'
 
 variables:
+  solution: '**/*.sln'
+  buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
 
 steps:
-- task: DotNetCoreCLI@2
+- task: NuGetToolInstaller@1
+  displayName: 'NuGet tool Installer'
+
+- task: NuGetCommand@2
+  displayName: 'NuGet restore'
   inputs:
-    command: 'build'
-    projects: '**/*.csproj'
-    arguments: '-c Release -o /app'
+    restoreSolution: '$(solution)'
+
+- task: Npm@1
+  displayName: 'npm install'
+  inputs:
+    workingDir: backend/Backend/Clientapp
+    verbose: false
+
+# - task: Npm@1
+#   displayName: 'npm custom'
+#   inputs:
+#     command: custom
+#     workingDir: backend/Backend/Clientapp
+#     verbose: false
+#     customCommand: 'run build'
+
+# - task: PowerShell@2
+#   displayName: Build with commands
+#   inputs:
+#     targetType: 'inline'
+#     script: 'cd backend; dotnet publish'
+
+
+- task: VSBuild@1
+  inputs:
+    solution: '$(solution)'
+    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:DesktopBuildPackageLocation="$(build.artifactStagingDirectory)\WebApp.zip" /p:DeployIisAppPath="Default Web Site"'
+    platform: '$(buildPlatform)'
+    configuration: '$(buildConfiguration)'
+
+- task: CopyFiles@2
+  displayName: 'Copy files to Artifacts'
+  inputs:
+    SourceFolder: '$(build.artifactStagingDirectory)'
+    Contents: '**'
+    TargetFolder: '$(build.artifactstagingdirectory)'
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'
