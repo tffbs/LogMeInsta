@@ -130,7 +130,7 @@ namespace Backend.Controllers
                 LastName = currentUser.FirstName,
                 Email = currentUser.Email,
                 ProfilePicture = currentUser.ProfilePic,
-                friends = currentUser.Friends,
+                friends = currentUser.Friends.Count,
                 Pictures = currentUser.Pictures.Select(y => new
                 {
                     Likes = y.Likes,
