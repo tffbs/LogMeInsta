@@ -3,6 +3,7 @@ import { FriendsService } from './../../services/friends.service';
 import { AuthService } from './../../services/auth.service';
 import { Component, OnInit } from '@angular/core';
 import { ToastService } from './../../services/toast.service';
+import {Router} from '@angular/router';
 
 export class AppModule {}
 @Component({
@@ -15,13 +16,17 @@ export class UsersComponent implements OnInit {
   title = 'Search Users';
   searchText;
   users: User[] = [];
+  private router: Router;
 
-  constructor(private toastService: ToastService, private authService: AuthService, private friendsService: FriendsService) {}
+  constructor(router: Router, private toastService: ToastService, private authService: AuthService, private friendsService: FriendsService) {
+    this.router = router;
+  }
+
   ngOnInit(): void {
-    this.getFriends()
+    this.getFriends();
     this.friendsService.getUsers().subscribe(x => {
-      (x != null && x.length > 0) ? this.users = x : console.log("no users found")
-      console.log(this.users)
+      (x != null && x.length > 0) ? this.users = x : console.log('no users found');
+      console.log(this.users);
     }
       );
   }
@@ -49,11 +54,13 @@ export class UsersComponent implements OnInit {
       x => console.log(x),
       (error) => {
         console.log(error);
-        if(error.url && error.url.includes('facebook')){
-          window.location.href = error.url
-        }
+        window.location.href = error.url;
       }
       );
+  }
+
+  toChat(email: string){
+    this.router.navigate(['chat', email]);
   }
 
   getUsers(){

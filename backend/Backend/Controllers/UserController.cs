@@ -62,7 +62,6 @@ namespace Backend.Controllers
         {
             //find currentUser
             ApplicationUser currentUser = (ApplicationUser)userManager.GetUserAsync(this.User).Result;
-            currentUser.Friends.Add(new ApplicationUser() { Id = Guid.NewGuid().ToString(), FirstName = "TESZT", LastName = "ADAT", Email = "teszt@adat.com" });
             return Ok(currentUser.Friends.Select(x => new
             {
                 FirstName = x.FirstName,
@@ -179,11 +178,13 @@ namespace Backend.Controllers
             //find currentUser
             ApplicationUser currentUser = (ApplicationUser)userManager.GetUserAsync(this.User).Result;
             FriendRequest request = userRepository.GetUserRequest(requestId);
+            ApplicationUser friend = this.userRepository.GetUserByEmail(request.Creator);
             if (request.UID == null)
                 return BadRequest();
 
             if (accepted)
             {
+                friend.Friends.Add(currentUser);
                 userRepository.AddFriend(currentUser, request);
                 userRepository.RequestRemove(request);
             }

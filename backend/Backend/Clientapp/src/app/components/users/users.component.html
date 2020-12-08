@@ -31,6 +31,9 @@
               type="submit"
               (click)="changeUserStatus(user)"
             >
+            <div stlye='{{  user.isFriend ?  "display:block;" : "display:none;"}}'>
+              <button (click) = toChat(user.email)>Chat</button>
+            </div>
               <img class="img-friend" src='{{  user.isFriend ?  "assets/img//remove.png" : "assets/img//add.png"}}' />
             </button>
           </td>

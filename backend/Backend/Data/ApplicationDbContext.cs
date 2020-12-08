@@ -20,5 +20,7 @@ namespace Backend.Data
 
         public DbSet<FriendRequest> Requests { get; set; }
 
+        public DbSet<Message> Messages { get; set; }
+
     }
 }
