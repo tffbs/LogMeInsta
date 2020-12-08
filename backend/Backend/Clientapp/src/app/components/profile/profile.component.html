@@ -3,7 +3,7 @@
 <div *ngIf="user" class="container centered">
     <h2>{{user.firstName + " " + user.lastName}}</h2>
     <h4>Friends: {{user.numOffriends}}</h4>
-    <h4>Uploads: {{0}}</h4>
+    <h4>Uploads: {{user.pictures.length}}</h4>
 </div>
 
 <div *ngIf="this.requests.length > 0" class="container centered">
