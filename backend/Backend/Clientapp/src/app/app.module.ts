@@ -21,6 +21,7 @@ import { UsersComponent } from './components/users/users.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ToastsContainerComponent } from './shared/toasts-container/toasts-container.component';
 import { Ng2SearchPipeModule } from 'ng2-search-filter';
+import { ChatComponent } from './chat/chat.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -34,6 +35,7 @@ import { Ng2SearchPipeModule } from 'ng2-search-filter';
     ImageUploadComponent,
     UsersComponent,
     ToastsContainerComponent,
+    ChatComponent,
   ],
   imports: [
     AppRoutingModule,
