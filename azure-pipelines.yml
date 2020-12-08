@@ -36,7 +36,7 @@ steps:
   displayName: Build with commands
   inputs:
     targetType: 'inline'
-    script: 'cd backend; dotnet build'
+    script: 'cd backend; dotnet publish'
 
 
 # - task: VSBuild@1
