@@ -56,7 +56,7 @@ import { Observable } from 'rxjs';
         console.log(path);
         let params = new HttpParams();
         params = params.append('requestId', requestId);
-        params = params.append('accept', accept ? "true" : "false");
+        params = params.append('accepted', accept ? "true" : "false");
         return this.http.get(path, {params: params})
       }
   }

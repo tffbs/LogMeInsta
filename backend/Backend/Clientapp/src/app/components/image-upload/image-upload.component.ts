@@ -37,6 +37,7 @@ export class ImageUploadComponent implements OnInit {
         },
           (error) => {
             this.loading = false;
+            console.log(error)
             this.toastService.show('An error occured while uploading the image.', { classname: 'bg-danger text-light', delay: 2000 });
           }
         );
