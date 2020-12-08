@@ -33,14 +33,11 @@ steps:
     customCommand: 'run build'
 
 - task: PowerShell@2
+  displayName: Build with commands
   inputs:
     targetType: 'inline'
-    script: 'cd backend'
+    script: 'cd backend; dotnet build'
 
-- task: PowerShell@2
-  inputs:
-    targetType: 'inline'
-    script: 'dotnet build'
 
 # - task: VSBuild@1
 #   inputs:
