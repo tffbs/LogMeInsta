@@ -24,6 +24,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Azure.CognitiveServices.Vision.ComputerVision;
 using Backend.Service;
 using Backend.Repositories;
+using Backend.Hubs;
 
 namespace Backend
 {
@@ -47,6 +48,7 @@ namespace Backend
                         .AllowAnyHeader());
             });
             services.AddControllers();
+            services.AddSignalR();
             services.AddDbContext<ApplicationDbContext>(opt =>
             {
                 string connection = "Server = (localdb)\\mssqllocaldb; Database = InstaDB; Trusted_Connection = True; MultipleActiveResultSets = true";
@@ -107,16 +109,7 @@ namespace Backend
             app.UseEndpoints(ep =>
             {
                 ep.MapControllers();
-                //ep.MapFallbackToController("AuthorizedFallback", "Home");
-            });
-
-
-
-            app.UseStaticFiles(new StaticFileOptions
-            {
-                FileProvider = new PhysicalFileProvider(
-                    Path.Combine(Directory.GetCurrentDirectory(), "Content")),
-                RequestPath = "/Content"
+                ep.MapHub<ChatHub>("/chatHub");
             });
 
             app.UseSpa(spa =>
