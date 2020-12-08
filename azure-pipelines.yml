@@ -24,27 +24,27 @@ steps:
     workingDir: backend/Backend/Clientapp
     verbose: false
 
-- task: Npm@1
-  displayName: 'npm custom'
-  inputs:
-    command: custom
-    workingDir: backend/Backend/Clientapp
-    verbose: false
-    customCommand: 'run build'
-
-- task: PowerShell@2
-  displayName: Build with commands
-  inputs:
-    targetType: 'inline'
-    script: 'cd backend; dotnet publish'
-
-
-# - task: VSBuild@1
+# - task: Npm@1
+#   displayName: 'npm custom'
 #   inputs:
-#     solution: '$(solution)'
-#     msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:DesktopBuildPackageLocation="$(build.artifactStagingDirectory)\WebApp.zip" /p:DeployIisAppPath="Default Web Site"'
-#     platform: '$(buildPlatform)'
-#     configuration: '$(buildConfiguration)'
+#     command: custom
+#     workingDir: backend/Backend/Clientapp
+#     verbose: false
+#     customCommand: 'run build'
+
+# - task: PowerShell@2
+#   displayName: Build with commands
+#   inputs:
+#     targetType: 'inline'
+#     script: 'cd backend; dotnet publish'
+
+
+- task: VSBuild@1
+  inputs:
+    solution: '$(solution)'
+    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:DesktopBuildPackageLocation="$(build.artifactStagingDirectory)\WebApp.zip" /p:DeployIisAppPath="Default Web Site"'
+    platform: '$(buildPlatform)'
+    configuration: '$(buildConfiguration)'
 
 - task: CopyFiles@2
   displayName: 'Copy files to Artifacts'
