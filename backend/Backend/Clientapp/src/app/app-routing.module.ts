@@ -14,7 +14,7 @@ const routes: Routes = [
   { path: 'profile', component: ProfileComponent },
   { path: 'users', component: UsersComponent },
   { path: 'feed', component: FeedComponent },
-  { path: 'chat', component: ChatComponent },
+  { path: 'chat/:email', component: ChatComponent },
 ];
 
 @NgModule({

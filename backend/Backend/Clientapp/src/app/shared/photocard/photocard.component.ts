@@ -9,7 +9,8 @@ import { PhotoCard } from '../../models/photo';
 
 export class PhotocardComponent implements OnInit {
 
-  @Input() image: string;
+  @Input() imageData: string;
+  @Input() likes: number;
   @Input() userName: string;
 
   constructor() { }

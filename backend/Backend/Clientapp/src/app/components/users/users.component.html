@@ -1,7 +1,6 @@
 <div class="container text-center">
   <h1>{{ title }}</h1>
 </div>
-<button (click)="getFriends()">Get friends</button>
 <div class="container">
   <div class="row">
     <div class="search-user md-form mt-0">
@@ -14,17 +13,13 @@
         placeholder="Start searching for a user"
       />
     </div>
-    <table class="table table-hover">
+    <table class="table table-hover table-striped">
       <thead>
-        <!-- <tr>
-          <th>User</th>
-          <th>Is A Friend</th>
-        </tr> -->
       </thead>
       <tbody>
         <tr *ngFor="let user of users | filter: searchText">
           <td style="width: 10%"><img src="{{ user.profilePicture }}" /></td>
-          <td style="width: 80%">{{ user.firstName + " " + user.lastName }}</td>
+          <td style="width: 80%" class="">{{ user.firstName + " " + user.lastName }}</td>
           <td>
             <button
               class="btn"
@@ -33,6 +28,11 @@
             >
               <img class="img-friend" src='{{  user.isFriend ?  "assets/img//remove.png" : "assets/img//add.png"}}' />
             </button>
+          </td>
+          <td>
+            <div *ngIf="user.isFriend">
+              <button class="btn btn-success" (click) = toChat(user.email)>Chat</button>
+            </div>
           </td>
         </tr>
       </tbody>

@@ -1,7 +1,13 @@
-<button (click)="onClick('email@email.com')">Go To Chat</button> 
 
-<div class = "container" *ngFor="let detail of cardDetails">
-    <app-photocard [image]="detail.image" [userName]="detail.username"></app-photocard>
+<div class="container centered">
+    <h3>My Feed</h3>
+    <div *ngIf="this.user">
+        <div *ngFor="let user of this.user">
+            <div  class = "container card" *ngFor="let pic of user.pictures">
+                <app-photocard [imageData]="pic.picture" [likes]="pic.likes" [userName]="user.firstName + ' ' + user.lastName"></app-photocard>
+            </div>
+        </div>
+    </div>
 </div>
 
 

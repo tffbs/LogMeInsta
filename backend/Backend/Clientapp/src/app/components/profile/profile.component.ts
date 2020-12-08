@@ -1,12 +1,10 @@
 import { ToastService } from './../../services/toast.service';
-import { Subscription } from 'rxjs';
 import { User } from './../../model/user.model';
 import { UserService } from './../../services/user.service';
 import { Request } from './../../model/request.model';
 import { FriendsService } from './../../services/friends.service';
 import { PHOTOS } from './../../models/photo';
 import { Component, OnInit } from '@angular/core';
-import { PhotoCard } from 'src/app/models/photo';
 
 @Component({
   selector: 'app-profile',
@@ -15,7 +13,6 @@ import { PhotoCard } from 'src/app/models/photo';
 })
 export class ProfileComponent implements OnInit {
   user: User;
-  photos = PHOTOS;
   requests: Request[] = [];
 
 
@@ -26,7 +23,6 @@ export class ProfileComponent implements OnInit {
     this.getUserInfo();
   }
 
-  
   getRequests(){
     this.friendsService.getRequests().subscribe(x => {
       this.requests = x
@@ -39,7 +35,9 @@ export class ProfileComponent implements OnInit {
       this.user = x
       console.log(this.user)
     },
-    (error) => window.location.href = error.url
+    (error) => {
+        window.location.href = error.url
+    }
     )
   }
 
@@ -47,6 +45,7 @@ export class ProfileComponent implements OnInit {
     this.friendsService.acceptOrDeclineRequest(requestId, true).subscribe(
       x => {
         this.toastService.show('Accepted request', { classname: 'bg-success text-light', delay: 2000 });
+        this.getRequests();
       }
     );
   }
@@ -54,7 +53,7 @@ export class ProfileComponent implements OnInit {
   declineRequest(requestId: string){
     this.friendsService.acceptOrDeclineRequest(requestId, false).subscribe(x => {
       this.toastService.show('Declined request', { classname: 'bg-danger text-light', delay: 2000 });
-
+      this.getRequests();
     });
   }
 }

@@ -100,7 +100,7 @@ namespace Backend.Controllers
                 Pictures = x.Pictures.Select(y => new
                 {
                     Likes = y.Likes,
-                    Picture = y.PictureData,
+                    Picture = Convert.ToBase64String(y.PictureData, 0, y.PictureData.Length),
                     Uid = y.UID
                 })
             }));
@@ -114,7 +114,7 @@ namespace Backend.Controllers
             return Ok(currentUser.Pictures.Select(x => new
             {
                 Likes = x.Likes,
-                Picture = x.PictureData,
+                Picture = Convert.ToBase64String(x.PictureData, 0, x.PictureData.Length),
                 Uid = x.UID
             }));
         }
@@ -124,17 +124,17 @@ namespace Backend.Controllers
         {
             //find currentUser
             ApplicationUser currentUser = (ApplicationUser)userManager.GetUserAsync(this.User).Result;
-            return Ok(new
+             return Ok(new
             {
                 FirstName = currentUser.LastName,
                 LastName = currentUser.FirstName,
                 Email = currentUser.Email,
                 ProfilePicture = currentUser.ProfilePic,
-                friends = currentUser.Friends,
+                NumOffriends = currentUser.Friends.Count,
                 Pictures = currentUser.Pictures.Select(y => new
                 {
                     Likes = y.Likes,
-                    Picture = y.PictureData,
+                    Picture = Convert.ToBase64String(y.PictureData, 0, y.PictureData.Length),
                     Uid = y.UID
                 })
             });
