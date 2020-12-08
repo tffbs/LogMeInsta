@@ -1,66 +1,50 @@
 trigger:
-        branches:
-          include:
-          - master
-      
+  - main
+
 pool:
-  name: Azure Pipelines
-  vmImage: 'windows-2019'
-  demands:
-    - npm
-    - msbuild
-    - visualstudio
+  vmImage: 'windows-latest'
 
-variables: 
-  configuration: release
-  BuildConfiguration: "Release"
-  platform: x64
+variables:
+  solution: '**/*.sln'
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
 
-stages:
-- stage: Build
-  jobs:
-  - job: Build
-    steps:
-    - task: NuGetToolInstaller@0
-      displayName: 'Use NuGet 4.4.1'
-      inputs:
-        versionSpec: 4.4.1
-    - task: NuGetCommand@2
-      displayName: 'NuGet restore'
-      inputs:
-        restoreSolution: '$(Parameters.solution)'
-        # vstsFeed: '34356gsgv643a'
-    - task: Npm@1
-      displayName: 'npm install'
-      inputs:
-        workingDir: backend/Backend/Clientapp
-        verbose: false
-    - task: Npm@1
-      displayName: 'npm custom'
-      inputs:
-        command: custom
-        workingDir: backend/Backend/Clientapp
-        verbose: false
-        customCommand: 'run build'
-    - task: MSBuild@1
-      displayName: 'Build solution dotnet.csproj'
-      inputs:
-        solution: '**/*.csproj'
-        msbuildArguments: '/t:build /p:outputpath="$(build.artifactstagingdirectory)" /property:langversion=latest'
-    # - task: DotNetCoreCLI@2
-    #   displayName: Test
-    #   inputs:
-    #     command: test
-    #     projects: '$(Parameters.TestProjects)'
-    #      arguments: '--configuration $(BuildConfiguration)'
-    # - task: CopyFiles@2
-    #   displayName: 'Copy Files to: $(build.artifactstagingdirectory)\_PublishedWebsites\dotnet\angularfolder'
-    #   inputs:
-    #     SourceFolder: 'angularfoldername'
-    #     Contents: '**'
-    #     TargetFolder: '$(build.artifactstagingdirectory)\_PublishedWebsites\dotnet\angularfoldername'
+steps:
+- task: NuGetToolInstaller@1
+  displayName: 'NuGet tool Installer'
 
-    # - task: PublishBuildArtifacts@1
-    #   displayName: 'Publish Artifact: drop'
-    #   inputs:
-    #     PathtoPublish: '$(Build.ArtifactStagingDirectory)\_PublishedWebsites'
+- task: NuGetCommand@2
+  displayName: 'NuGet restore'
+  inputs:
+    restoreSolution: '$(solution)'
+- task: Npm@1
+  displayName: 'npm install'
+  inputs:
+    workingDir: backend/Backend/Clientapp
+    verbose: false
+- task: Npm@1
+  displayName: 'npm custom'
+  inputs:
+    command: custom
+    workingDir: backend/Backend/Clientapp
+    verbose: false
+    customCommand: 'run build'
+- task: VSBuild@1
+  inputs:
+    solution: '$(solution)'
+    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:DesktopBuildPackageLocation="$(build.artifactStagingDirectory)\WebApp.zip" /p:DeployIisAppPath="Default Web Site"'
+    platform: '$(buildPlatform)'
+    configuration: '$(buildConfiguration)'
+
+- task: CopyFiles@2
+  displayName: 'Copy files to Artifacts'
+  inputs:
+    SourceFolder: '$(build.artifactStagingDirectory)'
+    Contents: '**'
+    TargetFolder: '$(build.artifactstagingdirectory)'
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'
