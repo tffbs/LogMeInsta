@@ -1,9 +1,7 @@
 import { UserService } from './../../services/user.service';
 import { FriendsService } from './../../services/friends.service';
-import { Subscription } from 'rxjs';
-import { ImageService } from './../../services/image.service';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { PhotoCard } from 'src/app/models/photo';
+import { User } from 'src/app/model/user.model';
 
 @Component({
   selector: 'app-feed',
@@ -12,12 +10,13 @@ import { PhotoCard } from 'src/app/models/photo';
 })
 export class FeedComponent implements OnInit, OnDestroy {
 
-  cardDetails: Array<PhotoCard>;
-
-  constructor(private imageService: ImageService, private friendsService: FriendsService, private userService: UserService) {  }
+  user: User[];
+  constructor(private friendsService: FriendsService, private userService: UserService) {  }
 
   ngOnInit(): void {
-    this.userService.getFeed().subscribe(x => console.log(x));
+    this.userService.getFeed().subscribe(x => {
+      this.user = x;
+    });
   }
 
   ngOnDestroy(): void {

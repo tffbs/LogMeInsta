@@ -1,8 +1,8 @@
 import { User } from './user.model';
 export class Picture {
     UID: string;
-    PictureData: any;
-    Likes: number;
+    picture: any;
+    likes: number;
     UserId: string;
     User: User;
 }

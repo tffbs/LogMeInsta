@@ -2,7 +2,7 @@
 
 <div *ngIf="user" class="container centered">
     <h2>{{user.firstName + " " + user.lastName}}</h2>
-    <h4>Friends: {{user.friends.length}}</h4>
+    <h4>Friends: {{user.numOffriends}}</h4>
     <h4>Uploads: {{0}}</h4>
 </div>
 
@@ -17,8 +17,10 @@
 
 <div class="container centered">
     <h3>My Images</h3>
-    <div class = "container card" *ngFor="let detail of photos">
-        <app-photocard [image]="detail.image" [userName]="detail.username"></app-photocard>
+    <div *ngIf="this.user && this.user.pictures && this.user.pictures.length > 0">
+        <div  class = "container card" *ngFor="let pic of this.user.pictures">
+            <app-photocard [imageData]="pic.picture" [likes]="pic.likes"></app-photocard>
+        </div>
     </div>
 </div>
 

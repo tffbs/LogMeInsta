@@ -21,10 +21,10 @@ import { Observable } from 'rxjs';
       return this.http.get<User>(path);
     }
 
-    getFeed(): Observable<User> {
+    getFeed(): Observable<any> {
       let path = this.pathAPI + "feed";
       console.log(path);
-      return this.http.get<User>(path);
+      return this.http.get<any>(path);
     }
   
   }

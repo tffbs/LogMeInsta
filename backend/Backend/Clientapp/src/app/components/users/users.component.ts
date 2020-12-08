@@ -1,4 +1,3 @@
-import { Subscription } from 'rxjs';
 import { User } from './../../model/user.model';
 import { FriendsService } from './../../services/friends.service';
 import { AuthService } from './../../services/auth.service';
@@ -12,13 +11,12 @@ export class AppModule {}
   styleUrls: ['./users.component.css'],
 })
 export class UsersComponent implements OnInit {
-  
+
   title = 'Search Users';
   searchText;
   users: User[] = [];
 
   constructor(private toastService: ToastService, private authService: AuthService, private friendsService: FriendsService) {}
-  
   ngOnInit(): void {
     this.getFriends()
     this.friendsService.getUsers().subscribe(x => {
@@ -51,8 +49,10 @@ export class UsersComponent implements OnInit {
       x => console.log(x),
       (error) => {
         console.log(error);
-        window.location.href = error.url
-      } 
+        if(error.url && error.url.includes('facebook')){
+          window.location.href = error.url
+        }
+      }
       );
   }
 

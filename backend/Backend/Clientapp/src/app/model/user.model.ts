@@ -5,6 +5,6 @@ export class User{
     email: string;
     profilePic: string;
     isFriend: boolean
-    friends: User[];
+    numOffriends: number;
     pictures: Picture[]
 }
