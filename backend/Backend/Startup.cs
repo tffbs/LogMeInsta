@@ -38,15 +38,7 @@ namespace Backend
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddCors(options =>
-            {
-                options.AddPolicy("CorsPolicy",
-                    builder => builder
-                        .AllowAnyMethod()
-                        .AllowCredentials()
-                        .SetIsOriginAllowed((host) => true)
-                        .AllowAnyHeader());
-            });
+            services.AddCors();
             services.AddControllers();
             services.AddSignalR();
             services.AddDbContext<ApplicationDbContext>(opt =>
@@ -102,7 +94,6 @@ namespace Backend
                   .AllowAnyHeader());
             }
 
-            app.UseCors("CorsPolicy");
             app.UseAuthentication();
             app.UseRouting();
             app.UseAuthorization();
