@@ -17,11 +17,13 @@ steps:
   displayName: 'NuGet restore'
   inputs:
     restoreSolution: '$(solution)'
+
 - task: Npm@1
   displayName: 'npm install'
   inputs:
     workingDir: backend/Backend/Clientapp
     verbose: false
+
 - task: Npm@1
   displayName: 'npm custom'
   inputs:
@@ -29,12 +31,23 @@ steps:
     workingDir: backend/Backend/Clientapp
     verbose: false
     customCommand: 'run build'
-- task: VSBuild@1
+
+- task: PowerShell@2
   inputs:
-    solution: '$(solution)'
-    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:DesktopBuildPackageLocation="$(build.artifactStagingDirectory)\WebApp.zip" /p:DeployIisAppPath="Default Web Site"'
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
+    targetType: 'inline'
+    script: 'cd backend'
+
+- task: PowerShell@2
+  inputs:
+    targetType: 'inline'
+    script: 'dotnet build'
+
+# - task: VSBuild@1
+#   inputs:
+#     solution: '$(solution)'
+#     msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:DesktopBuildPackageLocation="$(build.artifactStagingDirectory)\WebApp.zip" /p:DeployIisAppPath="Default Web Site"'
+#     platform: '$(buildPlatform)'
+#     configuration: '$(buildConfiguration)'
 
 - task: CopyFiles@2
   displayName: 'Copy files to Artifacts'
