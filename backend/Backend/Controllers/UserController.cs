@@ -178,11 +178,13 @@ namespace Backend.Controllers
             //find currentUser
             ApplicationUser currentUser = (ApplicationUser)userManager.GetUserAsync(this.User).Result;
             FriendRequest request = userRepository.GetUserRequest(requestId);
+            ApplicationUser friend = this.userRepository.GetUserByEmail(request.Creator);
             if (request.UID == null)
                 return BadRequest();
 
             if (accepted)
             {
+                friend.Friends.Add(currentUser);
                 userRepository.AddFriend(currentUser, request);
                 userRepository.RequestRemove(request);
             }
