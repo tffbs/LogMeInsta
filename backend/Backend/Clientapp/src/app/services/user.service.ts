@@ -1,6 +1,6 @@
 import { User } from './../model/user.model';
 import { AppConfig } from './../config/config';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
@@ -9,12 +9,12 @@ import { Observable } from 'rxjs';
   })
   export class UserService {
 
-  
+
     private pathAPI = this.config.setting['PathAPI'] + 'user/';
-  
+
     constructor(private http: HttpClient, private config: AppConfig) { }
-  
-  
+
+
     public getInfo(): Observable<User> {
       let path = this.pathAPI + "userinfo";
       console.log(path);
@@ -26,6 +26,13 @@ import { Observable } from 'rxjs';
       console.log(path);
       return this.http.get<any>(path);
     }
-  
+
+    likePicture(uid: string) {
+      let path = this.pathAPI + "like";
+      console.log(path);
+      let params = new HttpParams();
+      params = params.append('uid', uid);
+      return this.http.get(path, {params: params})
+    }
+
   }
-  

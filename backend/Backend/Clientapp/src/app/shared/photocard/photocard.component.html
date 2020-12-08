@@ -6,13 +6,14 @@
       <tbody>
         <tr>
           <td style="width: 10%"><img class = "img-friend" src="assets/img/profile.png" /></td>
-          <td style="width: 90%">{{userName}}</td>
+          <td style="width: 90%">{{this.username}}</td>
         </tr>
       </tbody>
     </table>
-    <img class = "img-uploaded" src="{{'data:image/jpg;base64,' + imageData}}" />
+    <img class = "img-uploaded" src="{{'data:image/jpg;base64,' + this.picture.picture}}" />
     <div>
-      {{likes}}<img src="assets/img/like.png">
+      {{this.picture.likes}}
+      <button (click)="upload(this.picture.uid)"><img src="assets/img/like.png"></button>
     </div>
 
 </div>

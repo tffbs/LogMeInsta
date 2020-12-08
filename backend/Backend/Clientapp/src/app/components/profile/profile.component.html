@@ -19,7 +19,7 @@
     <h3>My Images</h3>
     <div *ngIf="this.user && this.user.pictures && this.user.pictures.length > 0">
         <div  class = "container card" *ngFor="let pic of this.user.pictures">
-            <app-photocard [imageData]="pic.picture" [likes]="pic.likes"></app-photocard>
+            <app-photocard [picture]="pic" [username]="user.firstName + ' ' + user.lastName"></app-photocard>
         </div>
     </div>
 </div>

@@ -32,12 +32,17 @@ export class ImageUploadComponent implements OnInit {
       this.imageService.onUpload(this.file)
         .subscribe(x => {
           this.loading = false;
+          this.toastService.toasts = [];
+          if(x.loaded && x.total)
+          this.toastService.show('The image was successfully uploaded.' + (x.loaded/x.total) * 100 + '% done' , { classname: 'bg-success text-light', delay: 2000 });
+          else
           this.toastService.show('The image was successfully uploaded.', { classname: 'bg-success text-light', delay: 2000 });
 
         },
           (error) => {
             this.loading = false;
             console.log(error)
+            this.toastService.toasts = [];
             this.toastService.show('An error occured while uploading the image.', { classname: 'bg-danger text-light', delay: 2000 });
           }
         );

@@ -1,3 +1,5 @@
+import { Picture } from './../../model/picture.model';
+import { UserService } from './../../services/user.service';
 import { Component, Input, OnInit } from '@angular/core';
 import { PhotoCard } from '../../models/photo';
 
@@ -9,13 +11,17 @@ import { PhotoCard } from '../../models/photo';
 
 export class PhotocardComponent implements OnInit {
 
-  @Input() imageData: string;
-  @Input() likes: number;
-  @Input() userName: string;
+  @Input() picture: Picture;
+  @Input() username: string;
 
-  constructor() { }
+  constructor(private userService: UserService) { }
 
   ngOnInit(): void {
+  }
+
+  upload(uid: string){
+    this.userService.likePicture(this.picture.uid).subscribe(x => console.log(x));
+    this.picture.likes = this.picture.likes + 1;
   }
 
 }
