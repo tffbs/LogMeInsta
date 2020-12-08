@@ -40,6 +40,26 @@ namespace Backend.Migrations
                     b.ToTable("Requests");
                 });
 
+            modelBuilder.Entity("Backend.Model.Like", b =>
+                {
+                    b.Property<string>("UID")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("CreatorId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("PictureUID")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("UID");
+
+                    b.HasIndex("CreatorId");
+
+                    b.HasIndex("PictureUID");
+
+                    b.ToTable("Likes");
+                });
+
             modelBuilder.Entity("Backend.Model.Message", b =>
                 {
                     b.Property<string>("UID")
@@ -315,6 +335,17 @@ namespace Backend.Migrations
                     b.HasOne("Backend.Model.ApplicationUser", null)
                         .WithMany("Requests")
                         .HasForeignKey("ApplicationUserId");
+                });
+
+            modelBuilder.Entity("Backend.Model.Like", b =>
+                {
+                    b.HasOne("Backend.Model.ApplicationUser", "Creator")
+                        .WithMany()
+                        .HasForeignKey("CreatorId");
+
+                    b.HasOne("Backend.Model.Picture", null)
+                        .WithMany("Persons")
+                        .HasForeignKey("PictureUID");
                 });
 
             modelBuilder.Entity("Backend.Model.Picture", b =>

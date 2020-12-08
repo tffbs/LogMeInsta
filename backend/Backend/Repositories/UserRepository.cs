@@ -96,14 +96,15 @@ namespace Backend.Repositories
 
         public void AddLike(Picture pic, ApplicationUser currentUser)
         {
-            pic.Persons.Add(currentUser);
+            pic.Persons.Add(new Like() { UID = Guid.NewGuid().ToString(), Creator = currentUser });
             pic.Likes = pic.Persons.Count;
             this.context.SaveChanges();
         }
 
         public void DeleteLike(Picture pic, ApplicationUser currentUser)
         {
-            pic.Persons.Remove(currentUser);
+            Like l = this.context.Likes.Where(x => x.Creator.Email == currentUser.Email).FirstOrDefault();
+            pic.Persons.Remove(l);
             pic.Likes = pic.Persons.Count;
             this.context.SaveChanges();
         }

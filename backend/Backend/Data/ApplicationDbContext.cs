@@ -12,6 +12,7 @@ namespace Backend.Data
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
+
         }
 
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
@@ -21,6 +22,7 @@ namespace Backend.Data
         public DbSet<FriendRequest> Requests { get; set; }
 
         public DbSet<Message> Messages { get; set; }
+        public DbSet<Like> Likes { get; set; }
 
     }
 }

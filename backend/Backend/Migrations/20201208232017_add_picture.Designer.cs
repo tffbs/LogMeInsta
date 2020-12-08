@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Backend.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20201208185328_init")]
-    partial class init
+    [Migration("20201208232017_add_picture")]
+    partial class add_picture
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -40,6 +40,26 @@ namespace Backend.Migrations
                     b.HasIndex("ApplicationUserId");
 
                     b.ToTable("Requests");
+                });
+
+            modelBuilder.Entity("Backend.Model.Like", b =>
+                {
+                    b.Property<string>("UID")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("CreatorId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("PictureUID")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("UID");
+
+                    b.HasIndex("CreatorId");
+
+                    b.HasIndex("PictureUID");
+
+                    b.ToTable("Likes");
                 });
 
             modelBuilder.Entity("Backend.Model.Message", b =>
@@ -317,6 +337,17 @@ namespace Backend.Migrations
                     b.HasOne("Backend.Model.ApplicationUser", null)
                         .WithMany("Requests")
                         .HasForeignKey("ApplicationUserId");
+                });
+
+            modelBuilder.Entity("Backend.Model.Like", b =>
+                {
+                    b.HasOne("Backend.Model.ApplicationUser", "Creator")
+                        .WithMany()
+                        .HasForeignKey("CreatorId");
+
+                    b.HasOne("Backend.Model.Picture", null)
+                        .WithMany("Persons")
+                        .HasForeignKey("PictureUID");
                 });
 
             modelBuilder.Entity("Backend.Model.Picture", b =>

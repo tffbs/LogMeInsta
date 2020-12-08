@@ -53,7 +53,7 @@ namespace Backend.Controllers
             //find currentUser
             ApplicationUser currentUser = (ApplicationUser)userManager.GetUserAsync(this.User).Result;
             Picture pic = this.userRepository.GetPictureByUID(uid);
-            if (pic.Persons.Any(x => x.Email == currentUser.Email))
+            if (pic.Persons.Any(x => x.Creator.Email == currentUser.Email))
                 this.userRepository.DeleteLike(pic,currentUser);
             else
                 this.userRepository.AddLike(pic,currentUser);

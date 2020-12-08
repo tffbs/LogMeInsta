@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Backend.Migrations
 {
-    public partial class init : Migration
+    public partial class add_picture : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -219,6 +219,31 @@ namespace Backend.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Likes",
+                columns: table => new
+                {
+                    UID = table.Column<string>(nullable: false),
+                    CreatorId = table.Column<string>(nullable: true),
+                    PictureUID = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Likes", x => x.UID);
+                    table.ForeignKey(
+                        name: "FK_Likes_AspNetUsers_CreatorId",
+                        column: x => x.CreatorId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Likes_Pictures_PictureUID",
+                        column: x => x.PictureUID,
+                        principalTable: "Pictures",
+                        principalColumn: "UID",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -264,6 +289,16 @@ namespace Backend.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Likes_CreatorId",
+                table: "Likes",
+                column: "CreatorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Likes_PictureUID",
+                table: "Likes",
+                column: "PictureUID");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Pictures_UserId",
                 table: "Pictures",
                 column: "UserId");
@@ -292,16 +327,19 @@ namespace Backend.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Messages");
+                name: "Likes");
 
             migrationBuilder.DropTable(
-                name: "Pictures");
+                name: "Messages");
 
             migrationBuilder.DropTable(
                 name: "Requests");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "Pictures");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
