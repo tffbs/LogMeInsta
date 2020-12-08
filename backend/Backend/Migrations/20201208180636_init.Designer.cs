@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Backend.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20201110094317_init")]
+    [Migration("20201208180636_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -26,17 +26,42 @@ namespace Backend.Migrations
                     b.Property<string>("UID")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("CreatorId")
+                    b.Property<string>("ApplicationUserId")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Creator")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("Time")
                         .HasColumnType("datetime2");
 
                     b.HasKey("UID");
 
-                    b.HasIndex("CreatorId");
+                    b.HasIndex("ApplicationUserId");
 
                     b.ToTable("Requests");
+                });
+
+            modelBuilder.Entity("Backend.Model.Message", b =>
+                {
+                    b.Property<string>("UID")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Msg")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Receiver")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Sender")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("UID");
+
+                    b.ToTable("Messages");
                 });
 
             modelBuilder.Entity("Backend.Model.Picture", b =>
@@ -44,21 +69,18 @@ namespace Backend.Migrations
                     b.Property<string>("UID")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("ApplicationUserId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<int>("Likes")
                         .HasColumnType("int");
 
-                    b.Property<string>("PictureData")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<byte[]>("PictureData")
+                        .HasColumnType("varbinary(max)");
 
                     b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("UID");
 
-                    b.HasIndex("ApplicationUserId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Pictures");
                 });
@@ -292,16 +314,16 @@ namespace Backend.Migrations
 
             modelBuilder.Entity("Backend.Model.FriendRequest", b =>
                 {
-                    b.HasOne("Backend.Model.ApplicationUser", "Creator")
+                    b.HasOne("Backend.Model.ApplicationUser", null)
                         .WithMany("Requests")
-                        .HasForeignKey("CreatorId");
+                        .HasForeignKey("ApplicationUserId");
                 });
 
             modelBuilder.Entity("Backend.Model.Picture", b =>
                 {
-                    b.HasOne("Backend.Model.ApplicationUser", null)
+                    b.HasOne("Backend.Model.ApplicationUser", "User")
                         .WithMany("Pictures")
-                        .HasForeignKey("ApplicationUserId");
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

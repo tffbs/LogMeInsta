@@ -59,6 +59,21 @@ namespace Backend.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Messages",
+                columns: table => new
+                {
+                    UID = table.Column<string>(nullable: false),
+                    Sender = table.Column<string>(nullable: true),
+                    Receiver = table.Column<string>(nullable: true),
+                    Msg = table.Column<string>(nullable: true),
+                    Date = table.Column<DateTime>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Messages", x => x.UID);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
@@ -169,17 +184,16 @@ namespace Backend.Migrations
                 columns: table => new
                 {
                     UID = table.Column<string>(nullable: false),
-                    PictureData = table.Column<string>(nullable: true),
+                    PictureData = table.Column<byte[]>(nullable: true),
                     Likes = table.Column<int>(nullable: false),
-                    UserId = table.Column<string>(nullable: true),
-                    ApplicationUserId = table.Column<string>(nullable: true)
+                    UserId = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Pictures", x => x.UID);
                     table.ForeignKey(
-                        name: "FK_Pictures_AspNetUsers_ApplicationUserId",
-                        column: x => x.ApplicationUserId,
+                        name: "FK_Pictures_AspNetUsers_UserId",
+                        column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -190,15 +204,16 @@ namespace Backend.Migrations
                 columns: table => new
                 {
                     UID = table.Column<string>(nullable: false),
-                    CreatorId = table.Column<string>(nullable: true),
-                    Time = table.Column<DateTime>(nullable: false)
+                    Creator = table.Column<string>(nullable: true),
+                    Time = table.Column<DateTime>(nullable: false),
+                    ApplicationUserId = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Requests", x => x.UID);
                     table.ForeignKey(
-                        name: "FK_Requests_AspNetUsers_CreatorId",
-                        column: x => x.CreatorId,
+                        name: "FK_Requests_AspNetUsers_ApplicationUserId",
+                        column: x => x.ApplicationUserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -249,14 +264,14 @@ namespace Backend.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Pictures_ApplicationUserId",
+                name: "IX_Pictures_UserId",
                 table: "Pictures",
-                column: "ApplicationUserId");
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Requests_CreatorId",
+                name: "IX_Requests_ApplicationUserId",
                 table: "Requests",
-                column: "CreatorId");
+                column: "ApplicationUserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -275,6 +290,9 @@ namespace Backend.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "Messages");
 
             migrationBuilder.DropTable(
                 name: "Pictures");

@@ -109,7 +109,6 @@ namespace Backend
             app.UseEndpoints(ep =>
             {
                 ep.MapControllers();
-                ep.MapHub<ChatHub>("/chatHub");
             });
 
             app.UseSpa(spa =>
