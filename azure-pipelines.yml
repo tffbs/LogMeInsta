@@ -1,5 +1,5 @@
 trigger:
-  - master
+  - Dockerization
 
 pool:
   vmImage: 'windows-latest'
@@ -30,7 +30,14 @@ steps:
 #     command: custom
 #     workingDir: backend/Backend/Clientapp
 #     verbose: false
-#     customCommand: 'run build'
+#     customCommand: 'run build:prod'
+
+- task: PowerShell@2
+  displayName: ng build
+  inputs:
+    targetType: 'inline'
+    script: 'cd backend/Backend/Clientapp; npm run build:prod'
+
 
 # - task: PowerShell@2
 #   displayName: Build with commands
