@@ -24,16 +24,19 @@ steps:
     workingDir: backend/Backend/Clientapp
     verbose: false
 
-- task: Npm@1
-  displayName: 'npm custom'
-  inputs:
-    command: custom
-    workingDir: backend/Backend/Clientapp
-    verbose: false
-    customCommand: 'run build'
+# - task: Npm@1
+#   displayName: 'npm custom'
+#   inputs:
+#     command: custom
+#     workingDir: backend/Backend/Clientapp
+#     verbose: false
+#     customCommand: 'run build:prod'
 
-- script: |
-    cd backend/Backend/Clientapp;npm run build:prod
+- task: PowerShell@2
+  displayName: ng build
+  inputs:
+    targetType: 'inline'
+    script: 'cd backend/Backend/Clientapp; npm run build:prod'
 
 
 # - task: PowerShell@2
