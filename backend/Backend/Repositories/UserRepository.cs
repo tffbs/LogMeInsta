@@ -33,7 +33,7 @@ namespace Backend.Repositories
                 };
 
                 friend.Requests.Add(newRequest);
-                currentUser.Friends.Add(friend);
+
                 this.context.SaveChanges();
 
                 return true;
