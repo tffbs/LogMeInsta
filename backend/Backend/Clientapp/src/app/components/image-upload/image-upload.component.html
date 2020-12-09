@@ -1,0 +1,13 @@
+<div class="card bg-light mb-3 border-dark" style="width: 18rem;">
+    <img class="card-img-top" src="assets/img/imageup.png" alt="Card image cap">
+    <div class="spinner-border" role="status" *ngIf="loading">
+        <span class="sr-only">Loading...</span>
+      </div>
+    <div class="card-body">
+        <input style="display: none" type="file" (change)="onFileChanged($event)" #fileInput>
+        <button class="btn btn-primary" (click)="fileInput.click()">Select File</button>
+        <button class="btn btn-primary" (click)="onUpload()">Upload!</button>
+    </div>
+  </div>
+
+  <app-toasts aria-live="polite" aria-atomic="true"></app-toasts>

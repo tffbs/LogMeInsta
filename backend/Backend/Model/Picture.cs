@@ -14,13 +14,13 @@ namespace Backend.Model
         [Key]
         public string UID { get; set; }
 
-        public string PictureData { get; set; }
+        public byte[] PictureData { get; set; }
 
         public int Likes { get; set; }
 
         public string UserId { get; set; }
         
-        [NotMapped]
-        public virtual IdentityUser User { get; set; }
+        public virtual ApplicationUser User { get; set; }
+        public virtual ICollection<Like> Persons { get; set; }
     }
 }

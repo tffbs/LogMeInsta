@@ -6,11 +6,10 @@ using System.Threading.Tasks;
 
 namespace Backend.Model
 {
-    public class FriendRequest
+    public class Like
     {
         [Key]
         public string UID { get; set; }
-        public string Creator { get; set; }
-        public DateTime Time { get; set; }
+        public virtual ApplicationUser Creator { get; set; }
     }
 }

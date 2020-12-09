@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -13,11 +14,17 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Azure.CognitiveServices.Vision.ComputerVision;
+using Backend.Service;
+using Backend.Repositories;
+using Backend.Hubs;
 
 namespace Backend
 {
@@ -31,7 +38,17 @@ namespace Backend
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy",
+                    builder => builder
+                        .AllowAnyMethod()
+                        .AllowCredentials()
+                        .SetIsOriginAllowed((host) => true)
+                        .AllowAnyHeader());
+            });
             services.AddControllers();
+            services.AddSignalR();
             services.AddDbContext<ApplicationDbContext>(opt =>
             {
                 string connection = "Server = (localdb)\\mssqllocaldb; Database = InstaDB; Trusted_Connection = True; MultipleActiveResultSets = true";
@@ -64,21 +81,48 @@ namespace Backend
                         facebookOptions.SaveTokens = true;
                         facebookOptions.Scope.Add("user_friends");
                     });
-        }
+            services.AddSpaStaticFiles(configuration =>
+            {
+                configuration.RootPath = "ClientApp/dist";
+            });
 
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IImageService, ImageService>();
+            services.AddSingleton(s => new ComputerVisionClient(new ApiKeyServiceClientCredentials(Configuration["AzureCognitiveRecog:Vision:Key"])) { Endpoint = Configuration["AzureCognitiveRecog:Vision:Endpoint"] });
+
+        }
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseCors(x => x
+                  .AllowAnyOrigin()
+                  .AllowAnyMethod()
+                  .AllowAnyHeader());
             }
 
+            app.UseCors("CorsPolicy");
             app.UseAuthentication();
             app.UseRouting();
             app.UseAuthorization();
             app.UseEndpoints(ep =>
             {
                 ep.MapControllers();
+                ep.MapHub<ChatHub>("/chatHub");
+            });
+
+            app.UseSpa(spa =>
+            {
+                // To learn more about options for serving an Angular SPA from ASP.NET Core,
+                // see https://go.microsoft.com/fwlink/?linkid=864501
+
+                spa.Options.SourcePath = "ClientApp";
+
+                if (env.IsDevelopment())
+                {
+                    spa.UseAngularCliServer(npmScript: "start");
+                }
             });
         }
     }

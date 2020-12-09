@@ -6,11 +6,14 @@ using System.Threading.Tasks;
 
 namespace Backend.Model
 {
-    public class FriendRequest
+    public class Message
     {
         [Key]
         public string UID { get; set; }
-        public string Creator { get; set; }
-        public DateTime Time { get; set; }
+        public string Sender { get; set; }
+        public string Receiver { get; set; }
+        public string Msg { get; set; }
+        public DateTime Date { get; set; }
     }
 }
+    

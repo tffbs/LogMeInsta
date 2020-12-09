@@ -1,0 +1,43 @@
+<div class="container text-center">
+  <h1>{{ title }}</h1>
+</div>
+<div class="container">
+  <div class="row">
+    <div class="search-user md-form mt-0">
+      <input
+        class="form-control"
+        type="text"
+        name="search"
+        [(ngModel)]="searchText"
+        autocomplete="off"
+        placeholder="Start searching for a user"
+      />
+    </div>
+    <table class="table table-hover table-striped">
+      <thead>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of users | filter: searchText">
+          <td style="width: 10%"><img src="{{ user.profilePicture }}" /></td>
+          <td style="width: 80%" class="">{{ user.firstName + " " + user.lastName }}</td>
+          <td>
+            <button
+              class="btn"
+              type="submit"
+              (click)="changeUserStatus(user)"
+            >
+              <img class="img-friend" src='{{  user.isFriend ?  "assets/img//remove.png" : "assets/img//add.png"}}' />
+            </button>
+          </td>
+          <td>
+            <div *ngIf="user.isFriend">
+              <button class="btn btn-success" (click) = toChat(user.email)>Chat</button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<app-toasts aria-live="polite" aria-atomic="true"></app-toasts>
