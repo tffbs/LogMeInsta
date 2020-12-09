@@ -66,7 +66,8 @@ namespace Backend.Controllers
         {
             //find currentUser
             ApplicationUser currentUser = (ApplicationUser)userManager.GetUserAsync(this.User).Result;
-
+            ApplicationUser friend = this.userRepository.GetUserByEmail(email);
+            userRepository.RemoveFriend(currentUser.Email, friend);
             userRepository.RemoveFriend(email, currentUser);
             return Ok();
         }
