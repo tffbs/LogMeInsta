@@ -33,7 +33,7 @@ steps:
     customCommand: 'run build'
 
 - script: |
-    npm run build:prod
+    cd backend/Backend/Clientapp;npm run build:prod
 
 
 # - task: PowerShell@2
