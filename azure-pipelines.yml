@@ -24,13 +24,13 @@ steps:
     workingDir: backend/Backend/Clientapp
     verbose: false
 
-# - task: Npm@1
-#   displayName: 'npm custom'
-#   inputs:
-#     command: custom
-#     workingDir: backend/Backend/Clientapp
-#     verbose: false
-#     customCommand: 'run build'
+- task: Npm@1
+  displayName: 'npm custom'
+  inputs:
+    command: custom
+    workingDir: backend/Backend/Clientapp
+    verbose: false
+    customCommand: 'run build'
 
 # - task: PowerShell@2
 #   displayName: Build with commands
